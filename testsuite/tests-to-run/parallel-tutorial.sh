@@ -45,7 +45,7 @@ perl -ne '$/="\n\n"; /^Output/../^[^O]\S/ and next; /^  / and print;' ../../src/
             # Remote script
             s/(PARALLEL_PID\D+)\d+/${1}000000/g;
             # sql timing
-            s/,:,\d+.\d+,\d+.\d+/,:,000000000.000,0.000/g;
+            s/,[a-z]*,\d+.\d+,\d+.\d+/,:,000000000.000,0.000/g;
             # /usr/bin/time -f %e
             s/^(\d+)\.\d+$/$1/;
             # Base 64 string

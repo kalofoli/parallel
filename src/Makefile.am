@@ -76,13 +76,13 @@ niceload.1: niceload.pod
 
 parcat.1: parcat.pod
 	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
-		--section=1 $(srcdir)/parcat > $(srcdir)/parcat.1n \
+		--section=1 $(srcdir)/parcat.pod > $(srcdir)/parcat.1n \
 	&& mv $(srcdir)/parcat.1n $(srcdir)/parcat.1 \
 	|| echo "Warning: pod2man not found. Using old parcat.1"
 
 parset.1: parset.pod
 	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
-		--section=1 $(srcdir)/parset > $(srcdir)/parset.1n \
+		--section=1 $(srcdir)/parset.pod > $(srcdir)/parset.1n \
 	&& mv $(srcdir)/parset.1n $(srcdir)/parset.1 \
 	|| echo "Warning: pod2man not found. Using old parset.1"
 
@@ -149,8 +149,8 @@ parcat.html: parcat niceload.html
 	rm -f $(srcdir)/pod2htm*
 
 # Depending on niceload.html to avoid stupid pod2html race condition
-parset.html: parset parcat.html
-	pod2html --title "GNU parset" $(srcdir)/parset > $(srcdir)/parset.htmln \
+parset.html: parset.pod parcat.html
+	pod2html --title "GNU parset" $(srcdir)/parset.pod > $(srcdir)/parset.htmln \
 	&& mv $(srcdir)/parset.htmln $(srcdir)/parset.html \
 	|| echo "Warning: pod2html not found. Using old parset.html"
 	rm -f $(srcdir)/pod2htm*
@@ -192,7 +192,7 @@ parcat.texi: parcat
 	|| echo "Warning: pod2texi not found. Using old parcat.texi"
 
 parset.texi: parset.pod
-	pod2texi --output=$(srcdir)/parset.texi $(srcdir)/parset \
+	pod2texi --output=$(srcdir)/parset.texi $(srcdir)/parset.pod \
 	|| echo "Warning: pod2texi not found. Using old parset.texi"
 
 parallel.pdf: parallel.pod
@@ -232,7 +232,7 @@ parcat.pdf: parcat
 	|| echo "Warning: pod2pdf not found. Using old parcat.pdf"
 
 parset.pdf: parset.pod
-	pod2pdf --output-file $(srcdir)/parset.pdf $(srcdir)/parset --title "GNU parset" \
+	pod2pdf --output-file $(srcdir)/parset.pdf $(srcdir)/parset.pod --title "GNU parset" \
 	|| echo "Warning: pod2pdf not found. Using old parset.pdf"
 
 sem: parallel

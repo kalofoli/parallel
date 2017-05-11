@@ -6525,6 +6525,7 @@ sub total_jobs {
 	    my $record_queue = $self->{'commandlinequeue'}{'arg_queue'};
 	    my $start = time;
 	    while($record = $record_queue->get()) {
+		push @arg_records, $record;
 		if(time - $start > 10) {
 		    ::warning("Reading ".scalar(@arg_records).
 			      " arguments took longer than 10 seconds.");
@@ -6533,7 +6534,6 @@ sub total_jobs {
 		    $opt::shuf && ::warning("Consider removing --shuf.");
 		    last;
 		}
-		push @arg_records, $record;
 	    }
 	    while($record = $record_queue->get()) {
 		push @arg_records, $record;

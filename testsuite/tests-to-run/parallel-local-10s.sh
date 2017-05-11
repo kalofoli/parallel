@@ -314,6 +314,12 @@ par_plus_dyn_repl() {
     parallel --plus echo '{-2,,A}' ::: "wrong" ::: "$myvar" ::: "wrong"
 }
 
+par_slow_total_jobs() {
+    echo 'bug #51006: Slow total_jobs() eats job'
+    (echo a; sleep 6; echo b; sleep 6; seq 2) |
+	parallel echo '{=total_jobs()=}'
+}
+
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort |
     parallel --joblog /tmp/jl-`basename $0` -j10 --tag -k '{} 2>&1'

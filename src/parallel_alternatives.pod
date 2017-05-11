@@ -824,7 +824,7 @@ functions. All these fail:
 
 These do something different from GNU B<parallel>
 
-  # Read more arguments at a time -n 
+  # Read more arguments at a time -n
   parallel -n 2 echo ::: 1 a 2 b
   # -q to protect quoted $ and space
   parallel -q perl -e '$a=shift; print "$a"x10000000' ::: a b c
@@ -859,10 +859,14 @@ report this, but finishes with success - thereby risking data loss.
 
 =head2 DIFFERENCES BETWEEN Rush AND GNU Parallel
 
-Rush (https://github.com/shenwei356/rush) is written in Go and based
-on gargs.
+B<rush> (https://github.com/shenwei356/rush) is written in Go and
+based on B<gargs>.
 
-Rush has some string manipulations that can be emulated by putting
+Just like GNU B<parallel> B<rush> buffer in temporary files. But
+opposite GNU B<parallel> B<rush> does not clean up, if the process
+dies abnormally.
+
+B<rush> has some string manipulations that can be emulated by putting
 this into ~/.parallel/config (% is used instead of ^):
 
   --rpl '{:} s:(\.[^/]+)*$::'
@@ -928,6 +932,113 @@ B<12> seq 1 3 | parallel --joblog mylog --timeout 2 'sleep {}; echo {}'
 B<12> Followed by:
 
 B<12> seq 1 3 | parallel --joblog mylog --retry-failed 'sleep {}; echo {}'
+
+B<rush> has:
+
+=over 4
+
+=item * B<awk -v> like custom defined variables (B<-v>)
+
+With GNU B<parallel> you would simply simply set a shell variable:
+
+   parallel 'v={}; echo "$v"' ::: foo
+   echo foo | rush -v v={} 'echo {v}'
+
+Also B<rush> does not like special chars. So these do not work:
+
+   echo does not work | rush -v v=\" 'echo {v}'
+   echo "My  brother's  12\"  records" | rush -v v={} 'echo {v}'
+
+Whereas the corresponding GNU B<parallel> version works:
+
+   parallel 'v=\"; echo "$v"' ::: works
+   parallel 'v={}; echo "$v"' ::: "My  brother's  12\"  records"
+
+=item * Exit on first error(s) (-e)
+
+This is called B<--halt now,fail=1> (or shorter: B<--halt 2>) when
+used with GNU B<parallel>.
+
+=item * Settable records sending to every command (B<-n>, default 1)
+
+This is also called B<-n> in GNU B<parallel>.
+
+=item * Practical replacement strings
+
+=over 4
+
+=item {:} remove any extension
+
+With GNU B<parallel> this can be emulated by:
+
+  parallel --plus echo '{/\..*/}' ::: foo.ext.bar.gz
+
+=item {^suffix}, remove suffix
+
+With GNU B<parallel> this can be emulated by:
+
+  parallel --plus echo '{%.bar.gz}' ::: foo.ext.bar.gz
+
+=item {%.}, {%:}, basename without extension
+
+With GNU B<parallel> this can be emulated by:
+
+  parallel echo '{= s:.*/::;s/\..*// =}' ::: dir/foo.bar.gz
+
+And if you need it often, you define a B<--rpl> in
+B<$HOME/.parallel/config>:
+
+  --rpl '{%.} s:.*/::;s/\..*//'
+  --rpl '{%:} s:.*/::;s/\..*//'
+
+Then you can use them as:
+
+  parallel echo {%.} {%:} ::: dir/foo.bar.gz
+
+=back
+
+=item * Preset variable (macro)
+
+E.g.
+
+  echo foosuffix | rush -v p={^suffix} 'echo {p}_new_suffix'
+
+With GNU B<parallel> this can be emulated by:
+
+  echo foosuffix | parallel --plus 'p={%suffix}; echo ${p}_new_suffix'
+
+Opposite B<rush> GNU B<parallel> works fine if the input contains
+double space, ' and ":
+
+  echo "1'6\"  foosuffix" |
+    parallel --plus 'p={%suffix}; echo "${p}"_new_suffix'
+
+
+=item * Commands of multi-lines
+
+To improve readibilty GNU B<parallel> encourages not to use multi-line
+commands. In most cases it can be written as a function:
+
+  seq 1 3 | parallel --timeout 2 --joblog my.log 'sleep {}; echo {}; \
+  echo finish {}'
+
+Could be written as:
+
+  doit() {
+    sleep "$1"
+    echo "$1"
+    echo finish "$1"
+  }
+  export -f doit
+  seq 1 3 | parallel --timeout 2 --joblog my.log doit
+
+The failed commands can be resumed with:
+
+  seq 1 3 |
+    parallel --resume-failed --joblog my.log 'sleep {}; echo {};\
+  echo finish {}'
+
+=back
 
 
 =head2 DIFFERENCES BETWEEN machma AND GNU Parallel
