@@ -19,3 +19,7 @@ par_retries_unreachable	echo 1
 par_retries_unreachable	1
 par_retries_unreachable	echo 2
 par_retries_unreachable	2
+par_timeout 2>&1
+par_timeout	### test --timeout
+par_timeout	OK
+par_timeout	OK

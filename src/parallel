@@ -977,7 +977,7 @@ sub options_hash {
 	 "tty" => \$opt::tty,
 	 "T" => \$opt::retired,
 	 "H=i" => \$opt::retired,
-	 "dry-run|dryrun" => \$opt::dryrun,
+	 "dry-run|dryrun|dr" => \$opt::dryrun,
 	 "progress" => \$opt::progress,
 	 "eta" => \$opt::eta,
 	 "bar" => \$opt::bar,
@@ -1317,7 +1317,8 @@ sub parse_options {
 }
 
 sub check_invalid_option_combinations {
-    if(defined $opt::timeout and $opt::timeout !~ /^\d+(\.\d+)?%?$/) {
+    if(defined $opt::timeout and
+       $opt::timeout !~ /^\d+(\.\d+)?%?$|^(\d+(\.\d+)?[dhms])+$/i) {
 	::error("--timeout must be seconds or percentage.");
 	wait_and_exit(255);
     }
@@ -1370,7 +1371,7 @@ sub check_invalid_option_combinations {
 
 sub init_globals {
     # Defaults:
-    $Global::version = 20170423;
+    $Global::version = 20170512;
     $Global::progname = 'parallel';
     $Global::infinity = 2**31;
     $Global::debug = 0;
@@ -10570,6 +10571,13 @@ sub new {
 	# Timeout in percent
 	$pct = $1/100;
 	$delta_time = 1_000_000;
+    }
+    if($delta_time =~ /[dhms]/i) {
+	$delta_time =~ s/s/*1+/gi;
+	$delta_time =~ s/m/*60+/gi;
+	$delta_time =~ s/h/*3600+/gi;
+	$delta_time =~ s/d/*86400+/gi;
+	$delta_time = eval $delta_time."0";
     }
     return bless {
 	'queue' => [],

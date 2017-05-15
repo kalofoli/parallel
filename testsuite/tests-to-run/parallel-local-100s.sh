@@ -74,6 +74,14 @@ par_mem_leak() {
     fi
 }
 
+par_timeout() {
+    echo "### test --timeout"
+    stdout time -f %e parallel --timeout 1s sleep ::: 10 |
+	perl -ne '1 < $_ and $_ < 10 and print "OK\n"'
+    stdout time -f %e parallel --timeout 1m sleep ::: 100 |
+	perl -ne '10 < $_ and $_ < 100 and print "OK\n"'
+}
+
 
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort | parallel -vj0 -k --tag --joblog /tmp/jl-`basename $0` '{} 2>&1'
