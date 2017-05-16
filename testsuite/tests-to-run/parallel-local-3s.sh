@@ -113,6 +113,10 @@ echo finish {}'
 echo finish {}'
 }
 
+par_dryrun_timeout_ungroup() {
+    echo 'bug #51039: --dry-run --timeout 3600 -u breaks'
+    seq 1000 | stdout parallel --dry-run --timeout 100 -u --jobs 10 echo | wc
+}
 
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort | parallel -j6 --tag -k '{} 2>&1'

@@ -148,7 +148,7 @@ parcat.html: parcat niceload.html
 	|| echo "Warning: pod2html not found. Using old parcat.html"
 	rm -f $(srcdir)/pod2htm*
 
-# Depending on niceload.html to avoid stupid pod2html race condition
+# Depending on parcat.html to avoid stupid pod2html race condition
 parset.html: parset.pod parcat.html
 	pod2html --title "GNU parset" $(srcdir)/parset.pod > $(srcdir)/parset.htmln \
 	&& mv $(srcdir)/parset.htmln $(srcdir)/parset.html \

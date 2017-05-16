@@ -1217,6 +1217,11 @@ sub parse_options {
 	    $opt::decompress_program = "cat >/dev/null";
 	}
     }
+    if(defined $opt::dryrun) {
+	# Force grouping due to bug #51039: --dry-run --timeout 3600 -u breaks
+	$opt::ungroup = 0;
+	$opt::group = 1;
+    }
     if(defined $opt::nonall) {
 	# Append a dummy empty argument if there are no arguments
 	# on the command line to avoid reading from STDIN.
@@ -1371,7 +1376,7 @@ sub check_invalid_option_combinations {
 
 sub init_globals {
     # Defaults:
-    $Global::version = 20170512;
+    $Global::version = 20170515;
     $Global::progname = 'parallel';
     $Global::infinity = 2**31;
     $Global::debug = 0;

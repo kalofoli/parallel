@@ -317,7 +317,7 @@ par_plus_dyn_repl() {
 par_slow_total_jobs() {
     echo 'bug #51006: Slow total_jobs() eats job'
     (echo a; sleep 6; echo b; sleep 6; seq 2) |
-	parallel echo '{=total_jobs()=}'
+	parallel -k echo '{=total_jobs()=}'
 }
 
 export -f $(compgen -A function | grep par_)
