@@ -196,100 +196,106 @@ file:///home/tange/privat/parallel/doc/release_new_version
 from:tange@gnu.org
 to:parallel@gnu.org, bug-parallel@gnu.org
 
-Subject: GNU Parallel 20170522 ('Macron') released <<[stable]>>
+Subject: GNU Parallel 20170522 ('Macron') released [stable]
 
-GNU Parallel 20170522 ('Macron') <<[stable]>> has been released. It is available for download at: http://ftpmirror.gnu.org/parallel/
+GNU Parallel 20170522 ('Macron') [stable] has been released. It is available for download at: http://ftpmirror.gnu.org/parallel/
 
-<<No new functionality was introduced so this is a good candidate for a stable release.>>
+Very little new functionality was introduced so this is a good candidate for a stable release.>>
 
 Haiku of the month:
 
-  <<>>
-    -- Ole Tange
+  Always test your script
+  using a --dry-run
+  or --dr
+    -- Ole Tange 
 
 New in this release:
 
-* Vote for GNU Parallel's community ads on
-  http://meta.unix.stackexchange.com/a/4356/2972
-  http://meta.askubuntu.com/a/16750/22307
-  http://meta.serverfault.com/a/9040/45704
+* --timeout can now use s=second,m=minute,h=hour,d=day.
 
-http://journal.frontiersin.org/article/10.3389/fncom.2017.00021/full#B18
+* --dr is now an alias for --dry-run.
 
-https://www.cyberciti.biz/faq/how-to-run-command-or-code-in-parallel-in-bash-shell-under-linux-or-unix/
+* Vote for GNU Parallel's community ads on http://meta.unix.stackexchange.com/a/4356/2972 http://meta.askubuntu.com/a/16750/22307 http://meta.serverfault.com/a/9040/45704
 
-https://github.com/jupiter126/Create_Speech_Dataset
+* GNU Parallel was cited in: Feature Detection in Visual Cortex during Different Functional States https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5397493/
 
-http://pubs.rsc.org/-/content/articlelanding/2017/cp/c7cp01662j#!divAbstract
+* GNU Parallel was cited in: From genotype to phenotype: inferring relationships between microbial traits and genomic components https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-44622/main.pdf
 
-http://www.hpc.lsu.edu/training/weekly-materials/2017-Spring/gnuparallel-Feb2017.pdf
+* GNU Parallel was cited in: Designing fecal microbiota transplant trials that account for differences in donor stool efficacy http://biorxiv.org/content/biorxiv/early/2016/07/25/065383.full.pdf
 
-https://joeray.me/gnu-parallel-how-to-list-millions-objects.html
+* GNU Parallel was cited in: Assessing the predictability of anharmonic vibrational modes at the example of hydroxyl groups - ad hoc construction of localised modes and the influence of structural solute–solvent motifs http://pubs.rsc.org/-/content/articlelanding/2017/cp/c7cp01662j#!divAbstract
 
-http://amedee.me/gnu-parallel-is-my-new-toaster/index.html
+* GNU Parallel was cited in: Mapping Environmental Influences on Utility Fire Threat ftp://frapftp.fire.ca.gov/outgoing/transfer/PUC_Map1/Utility%20Fire%20map%201%20final%20review%20and%20development%20report21616.pdf
 
-http://arjon.es/2017/05/11/which-is-the-best-tool-for-copying-a-large-directory-tree-locally/
+* GNU Parallel was cited in: Weak vs. Strong Disorder Superfluid-Bose Glass Transition in One Dimension https://arxiv.org/pdf/1704.02257.pdf
 
-https://github.com/faroit/dsdtools
+* GNU Parallel was cited in: Online Automatic Post-editing for MT in a Multi-Domain Translation Environment https://www.aclweb.org/anthology/E/E17/E17-1050.pdf
 
-ftp://frapftp.fire.ca.gov/outgoing/transfer/PUC_Map1/Utility%20Fire%20map%201%20final%20review%20and%20development%20report21616.pdf
+* GNU Parallel was cited in: Cross-calibration of S-NPP VIIRS moderate-resolution reflective solar bands against MODIS Aqua over dark water scenes http://www.atmos-meas-tech.net/10/1425/2017/amt-10-1425-2017.pdf
 
-https://dzone.com/articles/batch-convert-images-from-png-to-jpeg
+* GNU Parallel was cited in: Scattering Networks: Efficient 2D Implementation And Application To Melanoma Classification http://amslaurea.unibo.it/12261/1/nurrito_eugenio_tesi_fisica_magistrale.pdf
 
-https://arxiv.org/pdf/1704.02257.pdf
+* GNU Parallel was cited in: Genome-scale detection of positive selection in 9 primates predicts human-virus evolutionary conflicts http://biorxiv.org/content/biorxiv/early/2017/04/27/131680.full.pdf
 
-http://www.sciencedirect.com/science/article/pii/S0044848616312194
+* GNU Parallel is used in: Creates a speech dataset for deep learning https://github.com/jupiter126/Create_Speech_Dataset
 
-https://www.aclweb.org/anthology/E/E17/E17-1050.pdf
+* GNU Parallel is used in: Parse and process the demixing secrets dataset (DSD100) https://github.com/faroit/dsdtools
 
-http://www.atmos-meas-tech.net/10/1425/2017/amt-10-1425-2017.pdf
+* First glance at the gnu parallel utility https://ibiscybernetics.com/blog/2017-04-05.html
 
-http://amslaurea.unibo.it/12261/1/nurrito_eugenio_tesi_fisica_magistrale.pdf
+* Installing parallel from source https://bitsanddragons.wordpress.com/2017/05/03/installing-parallel-from-source/
 
-http://biorxiv.org/content/biorxiv/early/2017/04/27/131680.full.pdf
+* How to run command or code in parallel in bash shell under Linux or Unix https://www.cyberciti.biz/faq/how-to-run-command-or-code-in-parallel-in-bash-shell-under-linux-or-unix/
 
-http://www.nature.com/nprot/journal/v12/n5/full/nprot.2017.022.html?WT.feed_name=subjects_biotechnology
+* Parallel Serial Jobs Using GNU Parallel http://www.hpc.lsu.edu/training/weekly-materials/2017-Spring/gnuparallel-Feb2017.pdf
 
-https://128.84.21.199/pdf/1704.08997.pdf
+* GNU Parallel or How to list millions of S3 objects https://joeray.me/gnu-parallel-how-to-list-millions-objects.html
+
+* Which Is the Best Tool for Copying a Large Directory Tree Locally? http://arjon.es/2017/05/11/which-is-the-best-tool-for-copying-a-large-directory-tree-locally/
+
+<<Down https://springerplus.springeropen.com/articles/10.1186/s40064-016-2022-y>>
+
+<<Down http://www.nature.com/nprot/journal/v12/n5/full/nprot.2017.022.html?WT.feed_name=subjects_biotechnology>>
 
 <<Citation not ok: https://arxiv.org/pdf/1704.08997.pdf>>
 
+<<Probably http://www.sciencedirect.com/science/article/pii/S0044848616312194>>
 
-* <<Citation needed: https://sdstrowes.co.uk/publications/sdstrowes-rdns-aaaa.pdf>>
+<<Citation needed: https://sdstrowes.co.uk/publications/sdstrowes-rdns-aaaa.pdf>>
 
-* <<Citation not ok: https://www.nature.com/articles/s41598-017-01703-6>>
+<<Citation not ok: https://www.nature.com/articles/s41598-017-01703-6>>
 
-* <<Possibly http://link.springer.com/chapter/10.1007%2F978-3-319-22053-6_46>>
+<<Possibly http://link.springer.com/chapter/10.1007%2F978-3-319-22053-6_46>>
 
-* <<Possibly http://link.springer.com/article/10.1007/s12021-015-9290-5>>
+<<Possibly http://link.springer.com/article/10.1007/s12021-015-9290-5>>
 
-* <<Possibly http://link.springer.com/protocol/10.1007/978-1-4939-3578-9_14>>
+<<Possibly http://link.springer.com/protocol/10.1007/978-1-4939-3578-9_14>>
 
-* << kontakt GNU Parallel was used (unfortunately without citation) in: Instrumentation and Trace Analysis for Ad-hoc Python Workflows in Cloud Environments http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7214035>>
+<< kontakt GNU Parallel was used (unfortunately without citation) in: Instrumentation and Trace Analysis for Ad-hoc Python Workflows in Cloud Environments http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7214035>>
 
-* <<Har angiveligt submittet ny version - afventer opdatering>> GNU Parallel was used (unfortunately without citation) in: MUGBAS: a species free gene-based programme suite for post-GWAS analysis http://www.ncbi.nlm.nih.gov/pubmed/25765345
+<<Har angiveligt submittet ny version - afventer opdatering>> GNU Parallel was used (unfortunately without citation) in: MUGBAS: a species free gene-based programme suite for post-GWAS analysis http://www.ncbi.nlm.nih.gov/pubmed/25765345
 
-* <<Afventer updateret publisering>> GNU Parallel was used in: Large Scale Author Name Disambiguation in Digital Libraries http://ieeexplore.ieee.org/xpl/abstractReferences.jsp?tp=&arnumber=7004487&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D7004487
+<<Afventer updateret publisering>> GNU Parallel was used in: Large Scale Author Name Disambiguation in Digital Libraries http://ieeexplore.ieee.org/xpl/abstractReferences.jsp?tp=&arnumber=7004487&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D7004487
 
-* <<kontaktet 2015-06-22 Afventer svar fra journal>> GNU Parallel was used (unfortunately with wrong citation) in: TADSim: Discrete Event-Based Performance Prediction for Temperature-Accelerated Dynamics http://vruehle.de/publications/2015c.pdf
+<<kontaktet 2015-06-22 Afventer svar fra journal>> GNU Parallel was used (unfortunately with wrong citation) in: TADSim: Discrete Event-Based Performance Prediction for Temperature-Accelerated Dynamics http://vruehle.de/publications/2015c.pdf
 http://www.researchgate.net/profile/Christoph_Junghans/publication/276178326_TADSim_Discrete_Event-Based_Performance_Prediction_for_Temperature-Accelerated_Dynamics/links/55562b6708ae980ca60c8369.pdf
 
-* << Update forventet juni Rachel har lige svaret >> GNU Parallel was used in: SISRS: Site Identification from Short Read Sequences https://github.com/rachelss/SISRS/
+<< Update forventet juni Rachel har lige svaret >> GNU Parallel was used in: SISRS: Site Identification from Short Read Sequences https://github.com/rachelss/SISRS/
 
-* <<Citation needed: A Cache- and Memory-Aware Mapping Algorithm
+<<Citation needed: A Cache- and Memory-Aware Mapping Algorithm
 for Big Data Applications https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7323015>>
 
-* <<Citation needed: Introspecting for RSA Key Material to Assist Intrusion Detection http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=7331177&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D7331177>>
+<<Citation needed: Introspecting for RSA Key Material to Assist Intrusion Detection http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=7331177&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D7331177>>
 
-* <<Citation needed: 3D-GNOME: an integrated web service for structural modeling of the 3D genome http://nar.oxfordjournals.org/content/early/2016/05/16/nar.gkw437.full.pdf+html>>
+<<Citation needed: 3D-GNOME: an integrated web service for structural modeling of the 3D genome http://nar.oxfordjournals.org/content/early/2016/05/16/nar.gkw437.full.pdf+html>>
 
-* <<link No citation: Next-generation TCP for ns-3 simulator http://www.sciencedirect.com/science/article/pii/S1569190X15300939>>
+<<link No citation: Next-generation TCP for ns-3 simulator http://www.sciencedirect.com/science/article/pii/S1569190X15300939>>
 
-* <<link No citation: Scalable metagenomics alignment research tool (SMART): a scalable, rapid, and complete search heuristic for the classification of metagenomic sequences from complex sequence populations http://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-1159-6#Bib1>>
+<<link No citation: Scalable metagenomics alignment research tool (SMART): a scalable, rapid, and complete search heuristic for the classification of metagenomic sequences from complex sequence populations http://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-1159-6#Bib1>>
 
-* <<No citation: Argumentation Models for Cyber Attribution http://arxiv.org/pdf/1607.02171.pdf>>
+<<No citation: Argumentation Models for Cyber Attribution http://arxiv.org/pdf/1607.02171.pdf>>
 
-* <<Possible: http://link.springer.com/article/10.1007/s12021-015-9290-5 http://link.springer.com/protocol/10.1007/978-1-4939-3578-9_14>>
+<<Possible: http://link.springer.com/article/10.1007/s12021-015-9290-5 http://link.springer.com/protocol/10.1007/978-1-4939-3578-9_14>>
 
 * Bug fixes and man page updates.
 

@@ -7,6 +7,12 @@ test -d "parallel-00000000" || mkdir "parallel-00000000"
  (cd src && make  top_distdir=../parallel-00000000 distdir=../parallel-00000000/src \
      am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
 make[0]: Entering directory '~/privat/parallel/src'
+pod2html --title "GNU parset" ./parset.pod > ./parset.htmln \
+&& mv ./parset.htmln ./parset.html \
+|| echo "Warning: pod2html not found. Using old parset.html"
+/bin/bash: pod2html: command not found
+Warning: pod2html not found. Using old parset.html
+rm -f ./pod2htm*
 make[0]: Leaving directory '~/privat/parallel/src'
 test -n "" \
 || find "parallel-00000000" -type d ! -perm -755 \

@@ -14,7 +14,7 @@ man_MANS = parallel.1 env_parallel.1 sem.1 sql.1 niceload.1 \
 	parcat.1 parset.1
 doc_DATA = parallel.html env_parallel.html sem.html sql.html niceload.html \
 	parallel_tutorial.html parallel_design.html parallel_alternatives.html \
-	 parcat.html \
+	parcat.html parset.html \
 	parallel.texi env_parallel.texi sem.texi sql.texi niceload.texi \
 	parallel_tutorial.texi parallel_design.texi parallel_alternatives.texi \
 	parcat.texi parset.texi \
@@ -142,8 +142,8 @@ niceload.html: niceload.pod sql.html
 	rm -f $(srcdir)/pod2htm*
 
 # Depending on niceload.html to avoid stupid pod2html race condition
-parcat.html: parcat niceload.html
-	pod2html --title "GNU parcat" $(srcdir)/parcat > $(srcdir)/parcat.htmln \
+parcat.html: parcat.pod niceload.html
+	pod2html --title "GNU parcat" $(srcdir)/parcat.pod > $(srcdir)/parcat.htmln \
 	&& mv $(srcdir)/parcat.htmln $(srcdir)/parcat.html \
 	|| echo "Warning: pod2html not found. Using old parcat.html"
 	rm -f $(srcdir)/pod2htm*
@@ -187,8 +187,8 @@ niceload.texi: niceload.pod
 	pod2texi --output=$(srcdir)/niceload.texi $(srcdir)/niceload.pod \
 	|| echo "Warning: pod2texi not found. Using old niceload.texi"
 
-parcat.texi: parcat
-	pod2texi --output=$(srcdir)/parcat.texi $(srcdir)/parcat \
+parcat.texi: parcat.pod
+	pod2texi --output=$(srcdir)/parcat.texi $(srcdir)/parcat.pod \
 	|| echo "Warning: pod2texi not found. Using old parcat.texi"
 
 parset.texi: parset.pod
@@ -227,8 +227,8 @@ niceload.pdf: niceload.pod
 	pod2pdf --output-file $(srcdir)/niceload.pdf $(srcdir)/niceload.pod --title "GNU niceload" \
 	|| echo "Warning: pod2pdf not found. Using old niceload.pdf"
 
-parcat.pdf: parcat
-	pod2pdf --output-file $(srcdir)/parcat.pdf $(srcdir)/parcat --title "GNU parcat" \
+parcat.pdf: parcat.pod
+	pod2pdf --output-file $(srcdir)/parcat.pdf $(srcdir)/parcat.pod --title "GNU parcat" \
 	|| echo "Warning: pod2pdf not found. Using old parcat.pdf"
 
 parset.pdf: parset.pod

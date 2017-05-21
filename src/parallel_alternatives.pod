@@ -13,7 +13,6 @@ There are a lot programs with some of the functionality of GNU
 B<parallel>. GNU B<parallel> strives to include the best of the
 functionality without sacrificing ease of use.
 
-
 =head2 SUMMARY TABLE
 
 The following features are in some of the comparable tools:
@@ -1043,7 +1042,7 @@ The failed commands can be resumed with:
 
 =head2 DIFFERENCES BETWEEN machma AND GNU Parallel
 
-Todo. Requires Go > 1.6.
+Todo. Requires Go >= 1.7.
 
 
 =head2 DIFFERENCES BETWEEN ClusterSSH AND GNU Parallel
@@ -1064,6 +1063,124 @@ computer has 8 cores).
 GNU B<parallel> can be used as a poor-man's version of ClusterSSH:
 
 B<parallel --nonall -S server-a,server-b do_stuff foo bar>
+
+
+=head1 TESTING OTHER TOOLS
+
+There are certain issues that are very common on parallelizing
+tools. Here are a few stress tests. Be warned: If the tool is badly
+coded it may overload you machine.
+
+=head2 Output mixes
+
+Output from 2 jobs should not mix.
+
+  #!/bin/bash
+
+  paralleltool=parallel
+
+  cat <<-EOF > mycommand
+  #!/bin/bash
+
+  # If 'a', 'b' and 'c' mix: Very bad
+  perl -e 'print "a"x3000_000," "'
+  perl -e 'print "b"x3000_000," "'
+  perl -e 'print "c"x3000_000," "'
+  echo
+  EOF
+  chmod +x mycommand
+
+  # Run 30 jobs in parallel
+  seq 30 | $paralleltool -j0 ./mycommand | tr -s abc
+
+  # 'a b c' should always stay together
+  # and there should only be a single line per job
+
+=head2 Speed depends on number of words
+
+Some tools become very slow if output lines have many words.
+
+  #!/bin/bash
+
+  paralleltool=parallel
+
+  cat <<-EOF > mycommand
+  #!/bin/bash
+
+  # 10 MB of lines with 1000 words
+  yes "`seq 1000`" | head -c 10M
+  EOF
+  chmod +x mycommand
+
+  # Run 30 jobs in parallel
+  seq 30 | time $paralleltool -j0 ./mycommand > /dev/null
+
+=head2 Output limited by RAM
+
+Some tools cache output in RAM. This makes them extremely slow if the
+output is bigger than physical memory and crash if the the output is
+bigger than the virtual memory.
+
+  #!/bin/bash
+
+  paralleltool=parallel
+
+  cat <<'EOF' > mycommand
+  #!/bin/bash
+
+  # Generate 1 GB output
+  yes "`perl -e 'print \"c\"x30_000'`" | head -c 1G
+  EOF
+  chmod +x mycommand
+
+  # Run 20 jobs in parallel
+  # Adjust 20 to be > physical RAM and < free space on /tmp
+  seq 20 | time $paralleltool -j0 ./mycommand | wc -c
+
+=head2 Leaving tmp files at unexpected death
+
+Some tools do not clean up tmp files if they are killed.
+
+  #!/bin/bash
+
+  paralleltool=parallel
+
+  ls /tmp >/tmp/before
+  seq 10 | $paralleltool sleep &
+  pid=$!
+  # Give the tool time to start up
+  sleep 1
+  # Kill it without giving it a chance to cleanup
+  kill -9 $!
+  # Should be empty: No files should be left behind
+  diff <(ls /tmp) /tmp/before
+
+=head2 Dealing badly with special file names.
+
+It is not uncommon for users to create files like:
+
+  My brother's 12" records cost $$$.txt
+
+Some tools break on this.
+
+  #!/bin/bash
+
+  paralleltool=parallel
+
+  touch "My brother's 12\" records cost \$\$\$.txt"
+  ls My*txt | $paralleltool echo
+
+=head2 Composed commands do not work
+
+Some tools require you to wrap composed commands into B<bash -c>.
+
+  echo bar | $paralleltool echo foo';' echo {}
+
+=head2 Only one replacement string allowed
+
+Some tools can only insert the argument once.
+
+  echo bar | $paralleltool echo {} foo {}
 
 
 =head1 AUTHOR
