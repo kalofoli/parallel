@@ -1376,7 +1376,7 @@ sub check_invalid_option_combinations {
 
 sub init_globals {
     # Defaults:
-    $Global::version = 20170515;
+    $Global::version = 20170522;
     $Global::progname = 'parallel';
     $Global::infinity = 2**31;
     $Global::debug = 0;
@@ -5513,9 +5513,14 @@ sub compute_number_of_processes {
 	    # The child takes one process slot
 	    # It will be killed later
 	    $SIG{'TERM'} = $Global::original_sig{'TERM'};
-	    # 'exec sleep' takes less RAM than sleeping in perl
-	    exec 'sleep', 10101;
-            exit(0);
+	    if($^O eq "cygwin") {
+		# The exec does not work on Cygwin
+		sleep 10101010;
+	    } else {
+		# 'exec sleep' takes less RAM than sleeping in perl
+		exec 'sleep', 10101;
+	    }
+	    exit(0);
 	} else {
 	    # Failed to spawn
             $max_system_proc_reached = 1;
