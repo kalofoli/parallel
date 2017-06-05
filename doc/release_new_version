@@ -174,8 +174,8 @@ http://freshmeat.net/projects/parallel/releases/new
 
 https://joindiaspora.com/stream
 
-New release of #GNU Parallel pi․dk/0 New in this release pi․dk/2 See the intro videos pi․dk/1
-10 secs installation: wget -O - pi․dk/3|bash
+New release of #GNU Parallel pi.dk/0 New in this release pi.dk/2 See the intro videos pi.dk/1
+10 secs installation: wget -O - pi.dk/3|bash
 
 [x] Twitter
 Aspect: Public
@@ -196,74 +196,47 @@ file:///home/tange/privat/parallel/doc/release_new_version
 from:tange@gnu.org
 to:parallel@gnu.org, bug-parallel@gnu.org
 
-Subject: GNU Parallel 20170522 ('Macron') released [stable]
+Subject: GNU Parallel 20170622 ('Manchester') released <<[stable]>>
 
-GNU Parallel 20170522 ('Macron') [stable] has been released. It is available for download at: http://ftpmirror.gnu.org/parallel/
+GNU Parallel 20170622 ('Manchester') <<[stable]>> has been released. It is available for download at: http://ftpmirror.gnu.org/parallel/
 
-Very little new functionality was introduced so this is a good candidate for a stable release.>>
+<<No new functionality was introduced so this is a good candidate for a stable release.>>
 
 Haiku of the month:
 
-  Always test your script
-  using a --dry-run
-  or --dr
-    -- Ole Tange 
+  <<>>
+    -- Ole Tange
 
 New in this release:
 
-* --timeout can now use s=second,m=minute,h=hour,d=day.
+* Vote for GNU Parallel's community ads on
+  http://meta.unix.stackexchange.com/a/4356/2972
+  http://meta.askubuntu.com/a/16750/22307
+  http://meta.serverfault.com/a/9040/45704
 
-* --dr is now an alias for --dry-run.
+* Graph for overhead for 1000 jobs has been updated. It remains steadily at 3.5 ms per job on a 1.7 GHz machine https://www.gnu.org/software/parallel/process-time-j2-1700MHz-3000-1000.pdf
 
-* Vote for GNU Parallel's community ads on http://meta.unix.stackexchange.com/a/4356/2972 http://meta.askubuntu.com/a/16750/22307 http://meta.serverfault.com/a/9040/45704
+* GNU Parallel was cited in: The topology of the directed clique complex as a network invariant https://springerplus.springeropen.com/articles/10.1186/s40064-016-2022-y
 
-* GNU Parallel was cited in: Feature Detection in Visual Cortex during Different Functional States https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5397493/
+* GNU Parallel was cited in:
 
-* GNU Parallel was cited in: From genotype to phenotype: inferring relationships between microbial traits and genomic components https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-44622/main.pdf
+https://support.ehelp.edu.au/support/solutions/articles/6000089713-tips-for-running-jobs-on-your-vm#parallel
 
-* GNU Parallel was cited in: Designing fecal microbiota transplant trials that account for differences in donor stool efficacy http://biorxiv.org/content/biorxiv/early/2016/07/25/065383.full.pdf
+<<Citation not OK: BAMClipper: removing primers from alignments to minimize false-negative mutations in amplicon next-generation sequencing https://www.nature.com/articles/s41598-017-01703-6>>
 
-* GNU Parallel was cited in: Assessing the predictability of anharmonic vibrational modes at the example of hydroxyl groups - ad hoc construction of localised modes and the influence of structural solute–solvent motifs http://pubs.rsc.org/-/content/articlelanding/2017/cp/c7cp01662j#!divAbstract
+<<Wrong citation https://iris.sissa.it/retrieve/handle/20.500.11767/36149/10823/And%C3%B2_tesi.pdf>>
 
-* GNU Parallel was cited in: Mapping Environmental Influences on Utility Fire Threat ftp://frapftp.fire.ca.gov/outgoing/transfer/PUC_Map1/Utility%20Fire%20map%201%20final%20review%20and%20development%20report21616.pdf
-
-* GNU Parallel was cited in: Weak vs. Strong Disorder Superfluid-Bose Glass Transition in One Dimension https://arxiv.org/pdf/1704.02257.pdf
-
-* GNU Parallel was cited in: Online Automatic Post-editing for MT in a Multi-Domain Translation Environment https://www.aclweb.org/anthology/E/E17/E17-1050.pdf
-
-* GNU Parallel was cited in: Cross-calibration of S-NPP VIIRS moderate-resolution reflective solar bands against MODIS Aqua over dark water scenes http://www.atmos-meas-tech.net/10/1425/2017/amt-10-1425-2017.pdf
-
-* GNU Parallel was cited in: Scattering Networks: Efficient 2D Implementation And Application To Melanoma Classification http://amslaurea.unibo.it/12261/1/nurrito_eugenio_tesi_fisica_magistrale.pdf
-
-* GNU Parallel was cited in: Genome-scale detection of positive selection in 9 primates predicts human-virus evolutionary conflicts http://biorxiv.org/content/biorxiv/early/2017/04/27/131680.full.pdf
-
-* GNU Parallel is used in: Creates a speech dataset for deep learning https://github.com/jupiter126/Create_Speech_Dataset
-
-* GNU Parallel is used in: Parse and process the demixing secrets dataset (DSD100) https://github.com/faroit/dsdtools
-
-* First glance at the gnu parallel utility https://ibiscybernetics.com/blog/2017-04-05.html
-
-* Installing parallel from source https://bitsanddragons.wordpress.com/2017/05/03/installing-parallel-from-source/
-
-* How to run command or code in parallel in bash shell under Linux or Unix https://www.cyberciti.biz/faq/how-to-run-command-or-code-in-parallel-in-bash-shell-under-linux-or-unix/
-
-* Parallel Serial Jobs Using GNU Parallel http://www.hpc.lsu.edu/training/weekly-materials/2017-Spring/gnuparallel-Feb2017.pdf
-
-* GNU Parallel or How to list millions of S3 objects https://joeray.me/gnu-parallel-how-to-list-millions-objects.html
-
-* Which Is the Best Tool for Copying a Large Directory Tree Locally? http://arjon.es/2017/05/11/which-is-the-best-tool-for-copying-a-large-directory-tree-locally/
-
-<<Down https://springerplus.springeropen.com/articles/10.1186/s40064-016-2022-y>>
+<<Wrong citation http://www.cell.com/cms/attachment/2095201602/2077415979/mmc1.pdf>>
 
 <<Down http://www.nature.com/nprot/journal/v12/n5/full/nprot.2017.022.html?WT.feed_name=subjects_biotechnology>>
 
 <<Citation not ok: https://arxiv.org/pdf/1704.08997.pdf>>
 
-<<Probably http://www.sciencedirect.com/science/article/pii/S0044848616312194>>
-
 <<Citation needed: https://sdstrowes.co.uk/publications/sdstrowes-rdns-aaaa.pdf>>
 
 <<Citation not ok: https://www.nature.com/articles/s41598-017-01703-6>>
+
+<<Probably http://www.sciencedirect.com/science/article/pii/S0044848616312194>>
 
 <<Possibly http://link.springer.com/chapter/10.1007%2F978-3-319-22053-6_46>>
 
@@ -271,7 +244,7 @@ New in this release:
 
 <<Possibly http://link.springer.com/protocol/10.1007/978-1-4939-3578-9_14>>
 
-<< kontakt GNU Parallel was used (unfortunately without citation) in: Instrumentation and Trace Analysis for Ad-hoc Python Workflows in Cloud Environments http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7214035>>
+<<kontakt GNU Parallel was used (unfortunately without citation) in: Instrumentation and Trace Analysis for Ad-hoc Python Workflows in Cloud Environments http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7214035>>
 
 <<Har angiveligt submittet ny version - afventer opdatering>> GNU Parallel was used (unfortunately without citation) in: MUGBAS: a species free gene-based programme suite for post-GWAS analysis http://www.ncbi.nlm.nih.gov/pubmed/25765345
 

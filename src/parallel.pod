@@ -341,7 +341,7 @@ B<:::> and B<::::> can be mixed. So these are equivalent:
     ::: 1 2 3
 
 
-=item B<:::+> I<arguments> (alpha testing)
+=item B<:::+> I<arguments> (beta testing)
 
 Like B<:::> but linked like B<--link> to the previous input source.
 
@@ -362,7 +362,7 @@ B<:::> and B<::::> can be mixed.
 See B<-a>, B<:::> and B<--link>.
 
 
-=item B<::::+> I<argfiles> (alpha testing)
+=item B<::::+> I<argfiles> (beta testing)
 
 Like B<::::> but linked like B<--link> to the previous input source.
 
@@ -418,7 +418,7 @@ string that is not in the command line.
 See also: B<:::>.
 
 
-=item B<--bar> (alpha testing)
+=item B<--bar> (beta testing)
 
 Show progress as a progress bar. In the bar is shown: % of jobs
 completed, estimated seconds left, and number of jobs started.
@@ -656,7 +656,7 @@ variables, arrays, and functions) use B<env_parallel>.
 See also: B<--record-env>.
 
 
-=item B<--eta> (alpha testing)
+=item B<--eta> (beta testing)
 
 Show the estimated number of seconds before finishing. This forces GNU
 B<parallel> to read all jobs before starting to find the number of
@@ -744,9 +744,9 @@ See also: B<--line-buffer> B<--ungroup>
 Print a summary of the options to GNU B<parallel> and exit.
 
 
-=item B<--halt-on-error> I<val> (alpha testing)
+=item B<--halt-on-error> I<val> (beta testing)
 
-=item B<--halt> I<val> (alpha testing)
+=item B<--halt> I<val> (beta testing)
 
 When should GNU B<parallel> terminate? In some situations it makes no
 sense to run all jobs. GNU B<parallel> should simply give up as soon
@@ -891,7 +891,7 @@ specified, and for B<-I {}> otherwise.  This option is deprecated;
 use B<-I> instead.
 
 
-=item B<--joblog> I<logfile> (alpha testing)
+=item B<--joblog> I<logfile> (beta testing)
 
 Logfile for executed jobs. Save a list of the executed jobs to
 I<logfile> in the following TAB separated format: sequence number,
@@ -1076,7 +1076,7 @@ Arguments will be recycled if one input source has more arguments than the other
 See also B<--header>, B<:::+>, B<::::+>.
 
 
-=item B<--load> I<max-load> (alpha testing)
+=item B<--load> I<max-load> (beta testing)
 
 Do not start new jobs on a given computer unless the number of running
 processes on the computer is less than I<max-load>. I<max-load> uses
@@ -1254,7 +1254,7 @@ control on the command line (used by GNU B<parallel> internally when
 called with B<--sshlogin>).
 
 
-=item B<--plus> (beta testing)
+=item B<--plus>
 
 Activate additional replacement strings: {+/} {+.} {+..} {+...} {..}
 {...} {/..} {/...} {##}. The idea being that '{+foo}' matches the opposite of
@@ -1767,7 +1767,7 @@ impossible to track which input block corresponds to which output.
 B<--round-robin> implies B<--pipe>, except if B<--pipepart> is given.
 
 
-=item B<--rpl> 'I<tag> I<perl expression>' (alpha testing)
+=item B<--rpl> 'I<tag> I<perl expression>' (beta testing)
 
 Use I<tag> as a replacement string for I<perl expression>. This makes
 it possible to define your own replacement strings. GNU B<parallel>'s
@@ -2236,7 +2236,7 @@ B<{}>.
 B<--tagstring> is ignored when using B<-u>, B<--onall>, and B<--nonall>.
 
 
-=item B<--tee> (beta testing)
+=item B<--tee>
 
 Pipe all data to all jobs. Used with B<--pipe>/B<--pipepart> and
 B<:::>.
@@ -2277,13 +2277,13 @@ different dir for the files. Setting B<--tmpdir> is equivalent to
 setting $TMPDIR.
 
 
-=item B<--tmux> (alpha testing)
+=item B<--tmux> (beta testing)
 
 Use B<tmux> for output. Start a B<tmux> session and run each job in a
 window in that session. No other output will be produced.
 
 
-=item B<--tmuxpane> (alpha testing)
+=item B<--tmuxpane> (beta testing)
 
 Use B<tmux> for output but put output into panes in the first window.
 Useful if you want to monitor the progress of less than 100 concurrent
@@ -2771,16 +2771,16 @@ foo) you can do:
 
 If you want to remove a different ending, you can use {%string}:
 
-  parallel --plus echo {%_beta} ::: mycode_beta keep_beta_here
+  parallel --plus echo {%_demo} ::: mycode_demo keep_demo_here
 
 You can also remove a starting string with {#string}
 
-  parallel --plus echo {#beta_} ::: beta_mycode keep_beta_here
+  parallel --plus echo {#demo_} ::: demo_mycode keep_demo_here
 
 To remove a string anywhere you can use regular expressions with
 {/regexp/replacement} and leave the replacement empty:
 
-  parallel --plus echo {/beta_/} ::: beta_mycode remove_beta_here
+  parallel --plus echo {/demo_/} ::: demo_mycode remove_demo_here
 
 
 =head1 EXAMPLE: Download 24 images for each of the past 30 days
