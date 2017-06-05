@@ -7,12 +7,6 @@ test -d "parallel-00000000" || mkdir "parallel-00000000"
  (cd src && make  top_distdir=../parallel-00000000 distdir=../parallel-00000000/src \
      am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
 make[0]: Entering directory '~/privat/parallel/src'
-pod2html --title "GNU parset" ./parset.pod > ./parset.htmln \
-&& mv ./parset.htmln ./parset.html \
-|| echo "Warning: pod2html not found. Using old parset.html"
-/bin/bash: pod2html: command not found
-Warning: pod2html not found. Using old parset.html
-rm -f ./pod2htm*
 make[0]: Leaving directory '~/privat/parallel/src'
 test -n "" \
 || find "parallel-00000000" -type d ! -perm -755 \
@@ -147,6 +141,18 @@ pod2html --title "GNU niceload" ./niceload.pod > ./niceload.htmln \
 /bin/bash: pod2html: command not found
 Warning: pod2html not found. Using old niceload.html
 rm -f ./pod2htm*
+pod2html --title "GNU parcat" ./parcat.pod > ./parcat.htmln \
+&& mv ./parcat.htmln ./parcat.html \
+|| echo "Warning: pod2html not found. Using old parcat.html"
+/bin/bash: pod2html: command not found
+Warning: pod2html not found. Using old parcat.html
+rm -f ./pod2htm*
+pod2html --title "GNU parset" ./parset.pod > ./parset.htmln \
+&& mv ./parset.htmln ./parset.html \
+|| echo "Warning: pod2html not found. Using old parset.html"
+/bin/bash: pod2html: command not found
+Warning: pod2html not found. Using old parset.html
+rm -f ./pod2htm*
 pod2texi --output=./parallel.texi ./parallel.pod \
 || echo "Warning: pod2texi not found. Using old parallel.texi"
 /bin/bash: pod2texi: command not found
@@ -179,6 +185,10 @@ pod2texi --output=./parallel_alternatives.texi ./parallel_alternatives.pod \
 || echo "Warning: pod2texi not found. Using old parallel_alternatives.texi"
 /bin/bash: pod2texi: command not found
 Warning: pod2texi not found. Using old parallel_alternatives.texi
+pod2texi --output=./parcat.texi ./parcat.pod \
+|| echo "Warning: pod2texi not found. Using old parcat.texi"
+/bin/bash: pod2texi: command not found
+Warning: pod2texi not found. Using old parcat.texi
 pod2texi --output=./parset.texi ./parset.pod \
 || echo "Warning: pod2texi not found. Using old parset.texi"
 /bin/bash: pod2texi: command not found
@@ -215,6 +225,10 @@ pod2pdf --output-file ./parallel_alternatives.pdf ./parallel_alternatives.pod --
 || echo "Warning: pod2pdf not found. Using old parallel_alternatives.pdf"
 /bin/bash: pod2pdf: command not found
 Warning: pod2pdf not found. Using old parallel_alternatives.pdf
+pod2pdf --output-file ./parcat.pdf ./parcat.pod --title "GNU parcat" \
+|| echo "Warning: pod2pdf not found. Using old parcat.pdf"
+/bin/bash: pod2pdf: command not found
+Warning: pod2pdf not found. Using old parcat.pdf
 pod2pdf --output-file ./parset.pdf ./parset.pod --title "GNU parset" \
 || echo "Warning: pod2pdf not found. Using old parset.pdf"
 /bin/bash: pod2pdf: command not found
@@ -275,6 +289,18 @@ pod2html --title "GNU niceload" ./niceload.pod > ./niceload.htmln \
 /bin/bash: pod2html: command not found
 Warning: pod2html not found. Using old niceload.html
 rm -f ./pod2htm*
+pod2html --title "GNU parcat" ./parcat.pod > ./parcat.htmln \
+&& mv ./parcat.htmln ./parcat.html \
+|| echo "Warning: pod2html not found. Using old parcat.html"
+/bin/bash: pod2html: command not found
+Warning: pod2html not found. Using old parcat.html
+rm -f ./pod2htm*
+pod2html --title "GNU parset" ./parset.pod > ./parset.htmln \
+&& mv ./parset.htmln ./parset.html \
+|| echo "Warning: pod2html not found. Using old parset.html"
+/bin/bash: pod2html: command not found
+Warning: pod2html not found. Using old parset.html
+rm -f ./pod2htm*
 pod2texi --output=./parallel.texi ./parallel.pod \
 || echo "Warning: pod2texi not found. Using old parallel.texi"
 /bin/bash: pod2texi: command not found
@@ -307,6 +333,10 @@ pod2texi --output=./parallel_alternatives.texi ./parallel_alternatives.pod \
 || echo "Warning: pod2texi not found. Using old parallel_alternatives.texi"
 /bin/bash: pod2texi: command not found
 Warning: pod2texi not found. Using old parallel_alternatives.texi
+pod2texi --output=./parcat.texi ./parcat.pod \
+|| echo "Warning: pod2texi not found. Using old parcat.texi"
+/bin/bash: pod2texi: command not found
+Warning: pod2texi not found. Using old parcat.texi
 pod2texi --output=./parset.texi ./parset.pod \
 || echo "Warning: pod2texi not found. Using old parset.texi"
 /bin/bash: pod2texi: command not found
@@ -343,12 +373,16 @@ pod2pdf --output-file ./parallel_alternatives.pdf ./parallel_alternatives.pod --
 || echo "Warning: pod2pdf not found. Using old parallel_alternatives.pdf"
 /bin/bash: pod2pdf: command not found
 Warning: pod2pdf not found. Using old parallel_alternatives.pdf
+pod2pdf --output-file ./parcat.pdf ./parcat.pod --title "GNU parcat" \
+|| echo "Warning: pod2pdf not found. Using old parcat.pdf"
+/bin/bash: pod2pdf: command not found
+Warning: pod2pdf not found. Using old parcat.pdf
 pod2pdf --output-file ./parset.pdf ./parset.pod --title "GNU parset" \
 || echo "Warning: pod2pdf not found. Using old parset.pdf"
 /bin/bash: pod2pdf: command not found
 Warning: pod2pdf not found. Using old parset.pdf
  /bin/mkdir -p '/usr/local/share/doc/parallel'
- /usr/bin/install -c -m 644 parallel.html env_parallel.html sem.html sql.html niceload.html parallel_tutorial.html parallel_design.html parallel_alternatives.html parcat.html parallel.texi env_parallel.texi sem.texi sql.texi niceload.texi parallel_tutorial.texi parallel_design.texi parallel_alternatives.texi parcat.texi parset.texi parallel.pdf env_parallel.pdf sem.pdf sql.pdf niceload.pdf parallel_tutorial.pdf parallel_design.pdf parallel_alternatives.pdf parcat.pdf parset.pdf '/usr/local/share/doc/parallel'
+ /usr/bin/install -c -m 644 parallel.html env_parallel.html sem.html sql.html niceload.html parallel_tutorial.html parallel_design.html parallel_alternatives.html parcat.html parset.html parallel.texi env_parallel.texi sem.texi sql.texi niceload.texi parallel_tutorial.texi parallel_design.texi parallel_alternatives.texi parcat.texi parset.texi parallel.pdf env_parallel.pdf sem.pdf sql.pdf niceload.pdf parallel_tutorial.pdf parallel_design.pdf parallel_alternatives.pdf parcat.pdf parset.pdf '/usr/local/share/doc/parallel'
 pod2man --release='00000000' --center='parallel' \
 	--section=1 ./parallel.pod > ./parallel.1n \
 && mv ./parallel.1n ./parallel.1 \

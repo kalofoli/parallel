@@ -1941,11 +1941,11 @@ sub arrayindex {
     #   $arr_ref1 = ref to @array1 to search in
     #   $arr_ref2 = ref to @array2 to search for
     my ($arr_ref1,$arr_ref2) = @_;
-    my $array1_as_string = join "", map { "\257\257".$_ } @$arr_ref1;
-    my $array2_as_string = join "", map { "\257\257".$_ } @$arr_ref2;
+    my $array1_as_string = join "", map { "\0".$_ } @$arr_ref1;
+    my $array2_as_string = join "", map { "\0".$_ } @$arr_ref2;
     my $i = index($array1_as_string,$array2_as_string,0);
     if($i == -1) { return -1 }
-    my @before = split /\257\257/, substr($array1_as_string,0,$i);
+    my @before = split /\0/, substr($array1_as_string,0,$i);
     return $#before;
 }
 
@@ -5595,7 +5595,7 @@ sub compute_number_of_processes {
 	my $self = shift;
 	my $wanted_processes = shift;
 	my $system_limit = 0;
-	my $slow_spawining_warning_printed = 0;
+	my $slow_spawning_warning_printed = 0;
 	my $time = time;
 	$more_filehandles = 1;
 	$tmpfhname = "TmpFhNamE";
@@ -5638,13 +5638,13 @@ sub compute_number_of_processes {
 	    if($system_limit > 10 and
 	       $forktime > 1 and
 	       $forktime > $system_limit * 0.01
-	       and not $slow_spawining_warning_printed) {
+	       and not $slow_spawning_warning_printed) {
 		# It took more than 0.01 second to fork a processes on avg.
 		# Give the user a warning. He can press Ctrl-C if this
 		# sucks.
 		::warning("Starting $system_limit processes took > $forktime sec.",
 			  "Consider adjusting -j. Press CTRL-C to stop.");
-		$slow_spawining_warning_printed = 1;
+		$slow_spawning_warning_printed = 1;
 	    }
 	}
 	cleanup();
@@ -8885,7 +8885,7 @@ sub set_exitsignal {
 		$Global::start_no_new_jobs ||= 1;
 	    }
 	    return($Global::halt_when);
-	}	
+	}
 	return "";
     }
 }
@@ -9384,16 +9384,16 @@ sub replaced {
 		    while($tt =~ s/([^\s\257]*  # before {=
                      (?:
                       \257<       # {=
-                      [^\257]*?   # The perl expression
+                      (?: (?! \257[<>]). )* # The perl expression
                       \257>       # =}
                       [^\s\257]*  # after =}
                      )+)/ /x) {
-			# $1 = pre \257 perlexpr \257 post
+			# $1 = pre \257< perlexpr \257> post
 			$word{"$1"} ||= 1;
 		    }
 		} else {
-		    while($tt =~ s/( (?: \257<([^\257]*?)\257>) )//x) {
-			# $f = \257 perlexpr \257
+		    while($tt =~ s/( \257<(?: (?! \257[<>]). )*\257> )//x) {
+			# $1 = \257< perlexpr \257>
 			$word{$1} ||= 1;
 		    }
 		}
@@ -9494,6 +9494,15 @@ sub replaced {
 		s/($regexp)/join(" ",@{$replace{$1}})/ge;
 	    }
 	}
+	if($Global::escape_string_present) {
+	    # Command line contains \257: Unescape it \257\256 => \257
+	    # If a replacement resulted in \257\256
+	    # it will have been escaped into \\\257\\\\256
+	    # and will not be matched below
+	    for(@target) {
+		s/\257\256/\257/g;
+	    }
+	}
 	::debug("replace", "Return @target\n");
 	return wantarray ? @target : "@target";
     }
@@ -9544,28 +9553,32 @@ sub new {
 	$opt::tagstring, $opt::workdir, $opt::results, $opt::retries) {
 	# Skip if undefined
 	$_ or next;
-	# Disallow \257 to avoid nested {= {= =} =}
-	if(/\257/) {
-	    ::error("Command cannot contain the character \257. ".
-		    "Use a function for that.");
-	    ::wait_and_exit(255);
-	}
+	# Escape \257 => \257\256
+	$Global::escape_string_present = s/\257/\257\256/g;
 	# Needs to match rightmost left parens (Perl defaults to leftmost)
-	# to deal with: {={==}
+	# to deal with: {={==} and {={==}=}
 	# Replace {= -> \257<  and  =} -> \257>
-	while(s{([^\257]*) \Q$Global::parensleft\E ([^\257]*?) \Q$Global::parensright\E }
-	      {$1\257<$2\257>}gx) {}
+	#
+	# Complex way to do:
+	#   s/{=(.*)=}/\257<$1\257>/g
+	# which would not work
+	s[\Q$Global::parensleft\E # Match {=
+          # Match . unless the next string is {= or =}
+          #   needed to force matching the shortest {= =}
+          ((?:(?! \Q$Global::parensleft\E|\Q$Global::parensright\E ).)*?)
+          \Q$Global::parensright\E ] # Match =}
+	{\257<$1\257>}gx;
 	for my $rpl (sort { length $b <=> length $a } keys %Global::rpl) {
 	    # Replace long --rpl's before short ones, as a short may be a
 	    # substring of a long:
 	    #   --rpl '% s/a/b/' --rpl '%% s/b/a/'
 	    #
-	    # Replace the short hand string (--rpl)
+	    # Replace the shorthand string (--rpl)
 	    # with the {= perl expr =}
 	    #
-	    # Avoid replacing inside existing {= perl expr =}
+	    # Avoid searching for shorthand strings inside existing {= perl expr =}
 	    #
-	    # Replace $$1 in {= perl expr =} with groupings in short hand string
+	    # Replace $$1 in {= perl expr =} with groupings in shorthand string
 	    #
 	    #   --rpl '{/(\.\S+)/(\.\S+)} s/$$1/$$2/g;'
 	    #     echo {/.tar/.gz} ::: UU.tar.gz
@@ -9576,7 +9589,7 @@ sub new {
                         /x;
 	    $grp_regexp ||= '';
 	    my $rplval = $Global::rpl{$rpl};
-	    while(s{( (?: ^|\257> ) [^\257]*? )
+	    while(s{( (?: ^|\257> ) (?: (?! \257[<>])(?:.|\n) )*? )
                       # Don't replace after \257 unless \257>
                     \Q$prefix\E $grp_regexp \Q$postfix\E}
 		  {
@@ -9608,7 +9621,7 @@ sub new {
 	    if($posrpl =~ s/^\{//) {
 		# Only do this if the shorthand start with {
 		$prefix=~s/^\{//;
-		while(s{( (?: ^|\257> ) [^\257]*? ) # Don't replace after \257 unless \257>
+		while(s{( (?: ^|\257> ) (?: (?! \257[<>]). )*? ) # Don't replace after \257 unless \257>
 		  \{(-?\d+) \s* \Q$prefix\E $grp_regexp \Q$postfix\E}
 		      {
 		      # The start remains the same
@@ -9625,7 +9638,7 @@ sub new {
 		      my $rv = $rplval;
 		      # replace $$1 with $_pAr_gRp1, $$2 with $_pAr_gRp2
 		      # in the code to be executed
-		      $rv =~ s/\$\$(\d+)/\$_pAr_gRp$1/gx;
+		      $rv =~ s/\$\$ (\d+)/\$_pAr_gRp$1/gx;
 		      # prepend with $_pAr_gRp1 = perlquote($1),
 		      my $set_args = "";
 		      for(my $i = 1;defined $grp[$i]; $i++) {
@@ -9728,7 +9741,7 @@ sub replacement_counts_and_lengths {
 	my $noncontextlen = 0;
 	my $contextgroups = 0;
 	for my $c (@cmd) {
-	    while($c =~ s/ \257<([^\257]*?)\257> /\000/x) {
+	    while($c =~ s/ \257<( (?: (?! \257[<>]). )*?)\257> /\000/x) {
 		# %replacecount = { "perlexpr" => number of times seen }
 		# e.g { "s/a/b/" => 2 }
 		$replacecount{$1}++;
@@ -9751,7 +9764,7 @@ sub replacement_counts_and_lengths {
 	    # Options that can contain replacement strings
 	    $_ or next;
 	    my $t = $_;
-	    while($t =~ s/ \257<([^\257]*)\257> //x) {
+	    while($t =~ s/ \257<( (?: (?! \257[<>]). )* )\257> //x) {
 		# %replacecount = { "perlexpr" => number of times seen }
 		# e.g { "$_++" => 2 }
 		# But for tagstring we just need to mark it as seen

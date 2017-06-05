@@ -688,6 +688,22 @@ par_link_files_as_only_arg() {
     parallel -k echo ::::+ <(seq 10) <(seq 3) <(seq 4)
 }
 
+par_macron() {
+    macron=$(perl -e 'print "\257"')
+    parallel ::: "echo $macron"
+    parallel echo ::: "$macron"
+    parallel echo "$macron" ::: $macron
+    macron_a=$(perl -e 'print "\257\256"')
+    parallel ::: "echo $macron_a"
+    parallel echo ::: "$macron_a"
+    parallel echo "$macron_a" ::: $macron_a
+    a=$(perl -e 'print "\257<\257<\257>\257>"')
+    parallel ::: "echo \"$a\""
+    parallel echo ::: "$a"
+    parallel echo \"$a\" ::: $a
+}
+
+
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort |
     parallel -j6 --tag -k --joblog +/tmp/jl-`basename $0` '{} 2>&1'
