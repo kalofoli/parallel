@@ -14,7 +14,8 @@ seq 1 3 | parallel -k --interactive "sleep 0.1; echo opt--interactive"
 _EOF
     chmod 755 /tmp/parallel-script-for-expect
 
-    expect -b - <<_EOF
+    (
+	expect -b - <<_EOF
 spawn /tmp/parallel-script-for-expect
 expect "echo opt-p 1"
 send "y\n"
@@ -32,8 +33,10 @@ expect "opt--interactive 1"
 expect "echo opt--interactive 3"
 send "y\n"
 expect "opt--interactive 3"
+send "\n"
 _EOF
-    echo
+	echo
+    ) | perl -ne '/\S/ and print'
 }
 
 par_k() {
@@ -42,16 +45,6 @@ par_k() {
     (echo "sleep 3; echo begin"; seq 1 30 |
 	parallel -kq echo "sleep 1; echo {}";
 	echo "echo end") | stdout parallel -k -j0
-}
-
-par_sigterm() {
-    echo '### Test SIGTERM'
-    parallel -k -j5 sleep 10';' echo ::: {1..99} >/tmp/parallel$$ 2>&1 &
-    A=$!
-    sleep 19; kill -TERM $A
-    wait
-    sort /tmp/parallel$$
-    rm /tmp/parallel$$
 }
 
 par_pipepart_spawn() {
@@ -316,7 +309,7 @@ par_plus_dyn_repl() {
 
 par_slow_total_jobs() {
     echo 'bug #51006: Slow total_jobs() eats job'
-    (echo a; sleep 6; echo b; sleep 6; seq 2) |
+    (echo a; sleep 7; echo b; sleep 7; seq 2) |
 	parallel -k echo '{=total_jobs()=}'
 }
 

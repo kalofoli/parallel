@@ -30,7 +30,7 @@ For security reasons it is recommended you use your package manager to
 install. But if you cannot do that then you can use this 10 seconds
 installation.
 
-The 10 seconds installation will try do to a full installation; if
+The 10 seconds installation will try to do a full installation; if
 that fails, a personal installation; if that fails, a minimal
 installation.
 

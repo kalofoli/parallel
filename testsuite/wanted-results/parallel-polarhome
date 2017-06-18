@@ -42,6 +42,7 @@ hpux.polarhome.com	Error in tempfile() using /XXXXXXXX.arg: Could not create tem
 hpux.polarhome.com	OK
 copy_and_test qnx.polarhome.com
 qnx.polarhome.com	### Run the test on qnx.polarhome.com
+qnx.polarhome.com	parallel: Warning: Cannot figure out number of CPU cores. Using 1.
 copy_and_test debian-ppc.polarhome.com
 debian-ppc.polarhome.com	### Run the test on debian-ppc.polarhome.com
 debian-ppc.polarhome.com	Works on debian-ppc.polarhome.com
@@ -166,6 +167,7 @@ netbsd.polarhome.com
 openbsd.polarhome.com
 openindiana
 pidora
+qnx
 raspbian
 redhat.polarhome.com
 scosysv.polarhome.com
@@ -195,6 +197,7 @@ netbsd.polarhome.com	Missing name for redirect.
 openbsd.polarhome.com	bash only A
 openindiana.polarhome.com	bash only A
 pidora.polarhome.com	bash only A
+qnx.polarhome.com	/bin/sh: syntax error: `(' unexpected
 raspbian.polarhome.com	bash only A
 redhat.polarhome.com	bash only A
 scosysv.polarhome.com	bash only A

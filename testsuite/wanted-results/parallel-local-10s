@@ -269,7 +269,6 @@ par_interactive	sleep 0.1; echo opt--interactive 2 ?...n
 par_interactive	sleep 0.1; echo opt--interactive 3 ?...y
 par_interactive	opt--interactive 1
 par_interactive	opt--interactive 3
-par_interactive	
 par_k	### Test -k
 par_k	parallel: Warning: Only enough file handles to run 9 jobs in parallel.
 par_k	parallel: Warning: Running 'parallel -j0 -N 9 --pipe parallel -j0' or
@@ -914,24 +913,6 @@ par_results_csv	    	9,:,999.999,999.999,0,6,0,0,"echo 23 12",23,12,"23 12
 par_results_csv	    	",
 par_round_robin_blocks	bug #49664: --round-robin does not complete
 par_round_robin_blocks	8
-par_sigterm	### Test SIGTERM
-par_sigterm	1
-par_sigterm	10
-par_sigterm	2
-par_sigterm	3
-par_sigterm	4
-par_sigterm	5
-par_sigterm	6
-par_sigterm	7
-par_sigterm	8
-par_sigterm	9
-par_sigterm	parallel: SIGTERM received. No new jobs will be started.
-par_sigterm	parallel: Waiting for these 5 jobs to finish. Send SIGTERM again to stop now.
-par_sigterm	parallel: sleep 10; echo 10
-par_sigterm	parallel: sleep 10; echo 6
-par_sigterm	parallel: sleep 10; echo 7
-par_sigterm	parallel: sleep 10; echo 8
-par_sigterm	parallel: sleep 10; echo 9
 par_slow_total_jobs	bug #51006: Slow total_jobs() eats job
 par_slow_total_jobs	parallel: Warning: Reading 2 arguments took longer than 10 seconds.
 par_slow_total_jobs	a

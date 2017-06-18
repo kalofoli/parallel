@@ -1933,21 +1933,21 @@ inputsource.
 
 Like this:
 
-  #!/usr/bin/parallel --shebang -r traceroute
+  #!/usr/bin/parallel --shebang -r wget
 
-  qubes-os.org
-  debian.org
-  freenetproject.org
+  https://ftpmirror.gnu.org/parallel/parallel-20120822.tar.bz2
+  https://ftpmirror.gnu.org/parallel/parallel-20130822.tar.bz2
+  https://ftpmirror.gnu.org/parallel/parallel-20140822.tar.bz2
 
 B<--shebang> must be set as the first option.
 
 On FreeBSD B<env> is needed:
 
-  #!/usr/bin/env -S parallel --shebang -r traceroute
+  #!/usr/bin/env -S parallel --shebang -r wget
 
-  qubes-os.org
-  debian.org
-  freenetproject.org
+  https://ftpmirror.gnu.org/parallel/parallel-20120822.tar.bz2
+  https://ftpmirror.gnu.org/parallel/parallel-20130822.tar.bz2
+  https://ftpmirror.gnu.org/parallel/parallel-20140822.tar.bz2
 
 There are many limitations of shebang (#!) depending on your operating
 system. See details on http://www.in-ulm.de/~mascheck/various/shebang/
@@ -2406,7 +2406,7 @@ care about the output. Compare these:
     'sleep {};echo -n start{};sleep {};echo {}end'
 
 It also disables B<--tag>. GNU B<parallel> outputs faster with
-B<-u>. Compare the speed of these:
+B<-u>. Compare the speeds of these:
 
   parallel seq ::: 300000000 >/dev/null
   parallel -u seq ::: 300000000 >/dev/null
@@ -3106,11 +3106,12 @@ printed as soon as possible you can use B<-u>.
 
 Compare the output of:
 
-  parallel traceroute ::: qubes-os.org debian.org freenetproject.org
-  parallel --line-buffer traceroute ::: \
-    qubes-os.org debian.org freenetproject.org
-  parallel -u traceroute ::: qubes-os.org debian.org freenetproject.org
-
+  parallel wget --limit-rate=100k \
+    https://ftpmirror.gnu.org/parallel/parallel-20{}0822.tar.bz2 ::: {12..16}
+  parallel --line-buffer wget --limit-rate=100k \
+    https://ftpmirror.gnu.org/parallel/parallel-20{}0822.tar.bz2 ::: {12..16}
+  parallel -u wget --limit-rate=100k \
+    https://ftpmirror.gnu.org/parallel/parallel-20{}0822.tar.bz2 ::: {12..16}
 
 =head1 EXAMPLE: Tag output lines
 
@@ -3118,13 +3119,15 @@ GNU B<parallel> groups the output lines, but it can be hard to see
 where the different jobs begin. B<--tag> prepends the argument to make
 that more visible:
 
-  parallel --tag traceroute ::: \
-    qubes-os.org debian.org freenetproject.org
+  parallel --tag wget --limit-rate=100k \
+    https://ftpmirror.gnu.org/parallel/parallel-20{}0822.tar.bz2 \
+    ::: {12..16}
 
 B<--tag> works with B<--line-buffer> but not with B<-u>:
 
-  parallel --tag --line-buffer traceroute \
-    ::: qubes-os.org debian.org freenetproject.org
+  parallel --tag --line-buffer wget --limit-rate=100k \
+    https://ftpmirror.gnu.org/parallel/parallel-20{}0822.tar.bz2 \
+    ::: {12..16}
 
 Check the uptime of the servers in I<~/.parallel/sshloginfile>:
 

@@ -4,6 +4,16 @@
 # Each should be taking 30-100s and be possible to run in parallel
 # I.e.: No race conditions, no logins
 
+par_sigterm() {
+    echo '### Test SIGTERM'
+    parallel -k -j5 sleep 15';' echo ::: {1..99} >/tmp/parallel$$ 2>&1 &
+    A=$!
+    sleep 29; kill -TERM $A
+    wait
+    sort /tmp/parallel$$
+    rm /tmp/parallel$$
+}
+
 par_race_condition1() {
     echo '### Test race condition on 8 CPU (my laptop)'
     seq 1 5000000 > /tmp/parallel_race_cond
