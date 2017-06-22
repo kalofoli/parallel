@@ -13,7 +13,7 @@ stdsort() {
 }
 export -f stdsort
 
-cat <<'EOF' | sed -e 's/;$/; /;s/$SERVER1/'$SERVER1'/;s/$SERVER2/'$SERVER2'/' | stdout parallel -vj200 -k --joblog /tmp/jl-`basename $0` -L1
+cat <<'EOF' | sed -e 's/;$/; /;s/$SERVER1/'$SERVER1'/;s/$SERVER2/'$SERVER2'/' | stdout parallel -vj100 -k --joblog /tmp/jl-`basename $0` -L1
 echo '### -0 -n3 echo < files0.xi'
 stdout xargs -0 -n3 echo < files0.xi
 stdout parallel -k -0 -n3 echo < files0.xi
@@ -228,7 +228,8 @@ stdout xargs -iARG echo ARG is xARGx < files.xi
 stdout parallel -k -iARG echo ARG is xARGx < files.xi
 echo '###  -i echo from \{\} to x{}y < items.xi'
 stdout xargs -i echo from \{\} to x{}y < items.xi
-stdout parallel -k -i echo from \{\} to x{}y < items.xi
+# GNU Parallel will see 'echo' as argument to '-i' if not given {}
+stdout parallel -k -i {} echo from \{\} to x{}y < items.xi
 echo '###  -i -s26 echo from \{\} to x{}y < items.xi'
 stdsort xargs -i -s26 echo from \{\} to x{}y < items.xi
 stdsort parallel -k -i -s26 echo from \{\} to x{}y < items.xi

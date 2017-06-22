@@ -4,7 +4,9 @@ cp /bin/sleep /tmp/mysleep
 killall -9 mysleep 2>/dev/null
 
 # force load > 10
-while uptime | grep -v age:.[1-9][0-9].[0-9][0-9] >/dev/null ; do (timeout 5 nice burnP6 2>/dev/null &) done
+while uptime | grep -v age:.[1-9][0-9].[0-9][0-9] >/dev/null ; do
+    (timeout 5 nice perl -e 'while(1){}' 2>/dev/null &)
+done
 
 sleep 2 &
 export PID1=$!

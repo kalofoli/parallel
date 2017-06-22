@@ -1197,15 +1197,16 @@ from ff to xffy
 from rr to xrry
 from t		t	 to xt		t	y
 from vv to xvvy
-stdout parallel -k -i echo from \{\} to x{}y < items.xi
-from: can't read /var/mail/{}
-from: can't read /var/mail/{}
-from: can't read /var/mail/{}
-from: can't read /var/mail/{}
-from: can't read /var/mail/{}
-from: can't read /var/mail/{}
-from: can't read /var/mail/{}
-from: can't read /var/mail/{}
+# GNU Parallel will see 'echo' as argument to '-i' if not given {}
+stdout parallel -k -i {} echo from \{\} to x{}y < items.xi
+from  	 to x 	y
+from dumb to xdumby
+from  s  s  to x s  s y
+from ff to xffy
+from rr to xrry
+from 	t		t	 to x	t		t	y
+from vv to xvvy
+from  	 to x 	y
 echo '###  -i -s26 echo from \{\} to x{}y < items.xi'
 ###  -i -s26 echo from \{\} to x{}y < items.xi
 stdsort xargs -i -s26 echo from \{\} to x{}y < items.xi

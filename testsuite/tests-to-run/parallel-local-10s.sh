@@ -4,6 +4,55 @@
 # Each should be taking 10-30s and be possible to run in parallel
 # I.e.: No race conditions, no logins
 
+par__pipepart_spawn() {
+    echo '### bug #46214: Using --pipepart doesnt spawn multiple jobs in version 20150922'
+    seq 1000000 > /tmp/num1000000;
+    stdout nice parallel --pipepart --progress -a /tmp/num1000000 --block 10k -j0 true |
+    grep 1:local | perl -pe 's/\d\d\d/999/g'
+}
+
+par__pipe_tee() {
+    echo 'bug #45479: --pipe/--pipepart --tee'
+    echo '--pipe --tee'
+
+    random1G() {
+	< /dev/zero openssl enc -aes-128-ctr -K 1234 -iv 1234 2>/dev/null |
+	    head -c 1G;
+    }
+    random1G | parallel --pipe --tee cat ::: {1..3} | LANG=C wc -c
+}
+
+par__pipepart_tee() {
+    echo 'bug #45479: --pipe/--pipepart --tee'
+    echo '--pipepart --tee'
+
+    random1G() {
+	< /dev/zero openssl enc -aes-128-ctr -K 1234 -iv 1234 2>/dev/null |
+	    head -c 1G;
+    }
+    tmp=$(mktemp)
+    random1G >$tmp
+    parallel --pipepart --tee -a $tmp cat ::: {1..3} | LANG=C wc -c
+    rm $tmp
+}
+
+par__memleak() {
+    echo "### Test memory consumption stays (almost) the same for 30 and 300 jobs"
+    echo "should give 1 == true"
+
+    mem30=$( nice stdout time -f %M parallel -j2 true :::: <(perl -e '$a="x"x60000;for(1..30){print $a,"\n"}') );
+    mem300=$( nice stdout time -f %M parallel -j2 true :::: <(perl -e '$a="x"x60000;for(1..300){print $a,"\n"}') );
+    echo "Memory use should not depend very much on the total number of jobs run\n";
+    echo "Test if memory consumption(300 jobs) < memory consumption(30 jobs) * 110% ";
+    echo $(($mem300*100 < $mem30 * 110))
+}
+
+par_slow_total_jobs() {
+    echo 'bug #51006: Slow total_jobs() eats job'
+    (echo a; sleep 10; echo b; sleep 10; seq 2) |
+	parallel -k echo '{=total_jobs()=}'
+}
+
 par_interactive() {
     echo '### Test -p --interactive'
     cat >/tmp/parallel-script-for-expect <<_EOF
@@ -36,7 +85,9 @@ expect "opt--interactive 3"
 send "\n"
 _EOF
 	echo
-    ) | perl -ne '/\S/ and print'
+    ) | perl -ne 's/\r//g;/\S/ and print' |
+	# Race will cause the order to change
+	sort
 }
 
 par_k() {
@@ -44,14 +95,7 @@ par_k() {
     ulimit -n 50
     (echo "sleep 3; echo begin"; seq 1 30 |
 	parallel -kq echo "sleep 1; echo {}";
-	echo "echo end") | stdout parallel -k -j0
-}
-
-par_pipepart_spawn() {
-    echo '### bug #46214: Using --pipepart doesnt spawn multiple jobs in version 20150922'
-    seq 1000000 > /tmp/num1000000;
-    stdout parallel --pipepart --progress -a /tmp/num1000000 --block 10k -j0 true |
-    grep 1:local | perl -pe 's/\d\d\d/999/g'
+	echo "echo end") | stdout nice parallel -k -j0
 }
 
 par_halt_on_error() {
@@ -107,17 +151,6 @@ par_k_linebuffer() {
     parallel --line-buffer -k 'echo stdout top;sleep 1;echo stderr in the middle >&2; sleep 1;echo stdout' ::: end 2>&1
 }
 
-par_memleak() {
-    echo "### Test memory consumption stays (almost) the same for 30 and 300 jobs"
-    echo "should give 1 == true"
-
-    mem30=$( stdout time -f %M parallel -j2 true :::: <(perl -e '$a="x"x60000;for(1..30){print $a,"\n"}') );
-    mem300=$( stdout time -f %M parallel -j2 true :::: <(perl -e '$a="x"x60000;for(1..300){print $a,"\n"}') );
-    echo "Memory use should not depend very much on the total number of jobs run\n";
-    echo "Test if memory consumption(300 jobs) < memory consumption(30 jobs) * 110% ";
-    echo $(($mem300*100 < $mem30 * 110))
-}
-
 par_maxlinelen_m_I() {
     echo "### Test max line length -m -I"
 
@@ -146,20 +179,9 @@ par_compress_fail() {
     seq 12 | parallel --compress -k seq {} 1000000 | md5sum
 }
 
-par_distribute_input_by_ability() {
-    echo "### bug #48290: round-robin does not distribute data based on business"
-    echo "### Distribute input to jobs that are ready"
-    echo "Job-slot n is 50% slower than n+1, so the order should be 1..7"
-    seq 20000000 |
-    parallel --tagstring {#} -j7 --block 300k --round-robin --pipe \
-	'pv -qL{=$_=$job->seq()**3+9=}0000 |wc -c' |
-    sort -nk2 | field 1
-}
-
 par_round_robin_blocks() {
     echo "bug #49664: --round-robin does not complete"
-
-    seq 20000000 | parallel --block 10M --round-robin --pipe wc -c | wc -l
+    seq 20000000 | parallel -j8 --block 10M --round-robin --pipe wc -c | wc -l
 }
 
 par_results_csv() {
@@ -200,31 +222,6 @@ par_kill_children_timeout() {
 par_tmux_fg() {
     echo 'bug #50107: --tmux --fg should also write how to access it'
     stdout parallel --tmux --fg sleep ::: 3 | perl -pe 's/.tmp\S+/tmp/'
-}
-
-par_pipe_tee() {
-    echo 'bug #45479: --pipe/--pipepart --tee'
-    echo '--pipe --tee'
-
-    random1G() {
-	< /dev/zero openssl enc -aes-128-ctr -K 1234 -iv 1234 2>/dev/null |
-	    head -c 1G;
-    }
-    random1G | parallel --pipe --tee cat ::: {1..3} | LANG=C wc -c
-}
-
-par_pipepart_tee() {
-    echo 'bug #45479: --pipe/--pipepart --tee'
-    echo '--pipepart --tee'
-
-    random1G() {
-	< /dev/zero openssl enc -aes-128-ctr -K 1234 -iv 1234 2>/dev/null |
-	    head -c 1G;
-    }
-    tmp=$(mktemp)
-    random1G >$tmp
-    parallel --pipepart --tee -a $tmp cat ::: {1..3} | LANG=C wc -c
-    rm $tmp
 }
 
 par_plus_dyn_repl() {
@@ -305,12 +302,6 @@ par_plus_dyn_repl() {
     parallel --plus echo '{,,A}' ::: "$myvar"
     parallel --plus echo '{2,,A}' ::: "wrong" ::: "$myvar" ::: "wrong"
     parallel --plus echo '{-2,,A}' ::: "wrong" ::: "$myvar" ::: "wrong"
-}
-
-par_slow_total_jobs() {
-    echo 'bug #51006: Slow total_jobs() eats job'
-    (echo a; sleep 7; echo b; sleep 7; seq 2) |
-	parallel -k echo '{=total_jobs()=}'
 }
 
 export -f $(compgen -A function | grep par_)

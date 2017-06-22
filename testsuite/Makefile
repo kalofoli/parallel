@@ -44,7 +44,7 @@ prereqlocal: installparallel
 	echo | pv -qL 10 || (echo pv is required for testsuite; /bin/false)
 	echo | script -c echo -q /dev/null || (echo script is required for testsuite; /bin/false)
 	niceload true || (echo niceload is required for testsuite; /bin/false)
-	which burnP6 || (echo burnP6 is required for testsuite; /bin/false)
+	which cpuburn || (echo cpuburn is required for testsuite; /bin/false)
 	which timeout || (echo timeout is required for testsuite; /bin/false)
 	which autossh || (echo autossh is required for testsuite; /bin/false)
 	which lsh || (echo lsh is required for testsuite; /bin/false)

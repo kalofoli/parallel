@@ -118,5 +118,14 @@ par_dryrun_timeout_ungroup() {
     seq 1000 | stdout parallel --dry-run --timeout 100 -u --jobs 10 echo | wc
 }
 
+par_sqlworker_hostname() {
+    echo 'bug #50901: --sqlworker should use hostname in the joblog instead of :'
+    parallel --sqlmaster :my/hostname echo  ::: 1 2 3
+    parallel -k --sqlworker :my/hostname
+    hostname=`hostname`
+    sql :my 'select host from hostname;' |
+	perl -pe "s/$hostname/<hostname>/g"
+}
+
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort | parallel -j6 --tag -k '{} 2>&1'

@@ -1376,7 +1376,7 @@ sub check_invalid_option_combinations {
 
 sub init_globals {
     # Defaults:
-    $Global::version = 20170523;
+    $Global::version = 20170622;
     $Global::progname = 'parallel';
     $Global::infinity = 2**31;
     $Global::debug = 0;
@@ -1804,7 +1804,7 @@ sub find_compression_program {
     # 16-cores: pzstd lz4 pigz lzop lbzip2 pbzip2 plzip lzip lrz pxz gzip lzma xz bzip2
     # 32-cores: pzstd lbzip2 pbzip2 zstd pigz lz4 lzop plzip lzip lrz gzip pxz lzma bzip2 xz clzip
 
-    my @prg = qw(pzstd lbzip2 pbzip2 zstd pigz lz4 lzop plzip lzip lrz
+    my @prg = qw(pzstd lbzip2 pbzip2 zstd pigz lz4 lzop plzip pixz lzip lrz
                  gzip pxz lzma bzip2 xz clzip);
     for my $p (@prg) {
 	if(which($p)) {

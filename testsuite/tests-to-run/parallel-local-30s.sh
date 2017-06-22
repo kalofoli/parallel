@@ -60,12 +60,17 @@ par_linebuffer_matters_compress_tag() {
     # forcing the compress tool to spit out compressed blocks
     head -c 10000000 /dev/urandom > $randomfile 
 
-    parallel -j0 --compress --tag --delay 1 "shuf $randomfile; sleep 1; shuf $randomfile; true" ::: {0..9} |
-	perl -ne '/^(\S+)\t/ and print "$1\n"' | uniq > $nolbfile &
-    parallel -j0 --compress --tag --delay 1 "shuf $randomfile; sleep 1; shuf $randomfile; true" ::: {0..9} |
-	perl -ne '/^(\S+)\t/ and print "$1\n"' | uniq > $controlfile &
-    parallel -j0 --line-buffer --compress --tag --delay 1 "shuf $randomfile; sleep 1; shuf $randomfile; true" ::: {0..9} |
-	perl -ne '/^(\S+)\t/ and print "$1\n"' | uniq > $lbfile &
+    testfunc() {
+	linebuffer="$1"
+	# Sleep 2 sec to give time to linebuffer-print the first part
+	parallel -j0 $linebuffer --compress --tag \
+		 "shuf $randomfile; sleep 2; shuf $randomfile; true" ::: {0..10} |
+	    perl -ne '/^(\S+)\t/ and print "$1\n"' | uniq | sort
+    }
+
+    testfunc > $nolbfile &
+    testfunc > $controlfile &
+    testfunc --linebuffer > $lbfile &
     wait
 
     nolb="$(cat $nolbfile)"

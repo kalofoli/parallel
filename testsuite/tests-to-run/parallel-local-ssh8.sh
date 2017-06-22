@@ -7,7 +7,7 @@ par_path_remote_bash() {
   rm -rf /tmp/parallel
   cp /usr/local/bin/parallel /tmp
   
-  cat <<'_EOS' | stdout ssh nopathbash@lo -T | grep -Ev 'packages can be updated|System restart required|Welcome to'
+  cat <<'_EOS' | stdout ssh nopathbash@lo -T | grep -Ev 'packages can be updated|System restart required|Welcome to|https://|Ubuntu|http://' | uniq
   echo BASH Path before: $PATH with no parallel
   parallel echo ::: 1
   # Race condition stderr/stdout
@@ -28,7 +28,7 @@ par_path_remote_csh() {
   rm -rf /tmp/parallel
   cp /usr/local/bin/parallel /tmp
 
-  cat <<'_EOS' | stdout ssh nopathcsh@lo -T | grep -Ev 'packages can be updated|System restart required|Welcome to'
+  cat <<'_EOS' | stdout ssh nopathcsh@lo -T | grep -Ev 'packages can be updated|System restart required|Welcome to|https://|Ubuntu|http://' | uniq
   echo CSH Path before: $PATH with no parallel
   which parallel >& /dev/stdout
   echo '^^^^^^^^ Not found is OK'
@@ -42,6 +42,8 @@ par_path_remote_csh() {
   endif
   # --filter to see if $PATH with parallel is transferred
   env_parallel --filter --env A,PATH -Slo echo '$PATH' ::: OK
+  # Sleep needed to avoid stderr/stdout mixing
+  sleep 1
   echo Right now it seems csh does not respect $PATH if set from Perl
   echo Done
 _EOS

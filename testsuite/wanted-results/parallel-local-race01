@@ -1,3 +1,82 @@
+par_distribute_input_by_ability	### bug #48290: round-robin does not distribute data based on business
+par_distribute_input_by_ability	### Distribute input to jobs that are ready
+par_distribute_input_by_ability	Job-slot n is 50% slower than n+1, so the order should be 1..7
+par_distribute_input_by_ability	1
+par_distribute_input_by_ability	2
+par_distribute_input_by_ability	3
+par_distribute_input_by_ability	4
+par_distribute_input_by_ability	5
+par_distribute_input_by_ability	6
+par_distribute_input_by_ability	7
+par_hostgroup	### --hostgroup force ncpu
+par_hostgroup	parallel
+par_hostgroup	parallel
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	### --hostgroup two group arg
+par_hostgroup	parallel
+par_hostgroup	parallel
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	### --hostgroup one group arg
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	### --hostgroup multiple group arg + unused group
+par_hostgroup	parallel
+par_hostgroup	parallel
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	### --hostgroup two groups @
+par_hostgroup	parallel	parallel
+par_hostgroup	parallel	parallel
+par_hostgroup	tange	tange
+par_hostgroup	tange	tange
+par_hostgroup	### --hostgroup
+par_hostgroup	no_group
+par_hostgroup	explicit_group
+par_hostgroup	implicit_group
+par_hostgroup	### --hostgroup --sshlogin with @
+par_hostgroup	no_group
+par_hostgroup	implicit_group
+par_hostgroup	### --hostgroup -S @group
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tcsh
+par_hostgroup	tcsh
+par_hostgroup	tcsh
+par_hostgroup	### --hostgroup -S @group1 -Sgrp2
+par_hostgroup	parallel
+par_hostgroup	parallel
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tcsh
+par_hostgroup	tcsh
+par_hostgroup	### --hostgroup -S @group1+grp2
+par_hostgroup	parallel
+par_hostgroup	parallel
+par_hostgroup	tange
+par_hostgroup	tange
+par_hostgroup	tcsh
+par_hostgroup	tcsh
 par_print_before_halt_on_error	### What is printed before the jobs are killed
 par_print_before_halt_on_error	-2	exit code 0
 par_print_before_halt_on_error	-2	0.1	0.1

@@ -1,15 +1,20 @@
 #!/bin/bash
 
+cpuburn=$(tempfile)
+(echo '#!/usr/bin/perl'
+ echo "eval{setpriority(0,0,9)}; while(1){}") > $cpuburn
+chmod 700 $cpuburn
+
 forceload () {
   # Force load
   LOAD=$1
-  # Start 10 times as many burnP6
-  seq 0 0.1 $1 | parallel -j0 timeout 20 burnP6 2>/dev/null &
+  # Start 10 times as many cpuburn
+  seq 0 0.1 $1 | parallel -j0 timeout 20 $cpuburn 2>/dev/null &
   PID=$!
   # Give GNU Parallel 1 second to startup
   sleep 1
   perl -e 'do{$a=`uptime`} while($a=~/average: *(\S+)/ and $1 < '$LOAD')'
-  # Load is now > $CPUS
+  # Load is now > $LOAD
 }
 
 # Force load avg > number of cpu cores
@@ -27,15 +32,16 @@ echo '### Test slow arguments generation - https://savannah.gnu.org/bugs/?32834'
   seq 1 3 | parallel -j1 "sleep 2; echo {}" | parallel -kj2 echo
 EOF
 
-# Make sure we got all the burnP6 killed
-killall -9 burnP6 2>/dev/null
+# Make sure we got all the cpuburn killed
+killall $(basename $cpuburn) 2>/dev/null
 
 echo '### Test too slow spawning'
 # Let the commands below run during high load
-seq 1000 | timeout 20 parallel -j400% -N0 burnP6 2>/dev/null &
+seq 1000 | timeout 20 parallel -j400% -N0 $cpuburn 2>/dev/null &
 PID=$!
 seq 1 1000 | stdout nice nice parallel --halt 1 -uj0 -N0 kill $PID | 
-  perl -pe '/parallel: Warning: Starting \d+ processes took/ and do {close STDIN; `kill '$PID';killall -9 burnP6`; print "OK\n"; exit }'; 
+  perl -pe '/parallel: Warning: Starting \d+ processes took/ and do {close STDIN; `kill '$PID';killall '$(basename $cpuburn)'`; print "OK\n"; exit }'; 
 
-# Make sure we got all the burnP6 killed
-killall -9 burnP6 2>/dev/null
+# Make sure we got all the cpuburn killed
+killall $(basename $cpuburn) 2>/dev/null
+rm $cpuburn

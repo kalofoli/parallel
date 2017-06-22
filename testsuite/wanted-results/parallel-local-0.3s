@@ -153,22 +153,6 @@ echo '### PARALLEL_TMUX not found'
 parallel: Error: not-existing not found in $PATH.
 echo '**'
 **
-  parallel -j4 --halt 2 ::: 'sleep 1' burnP6 false;     killall burnP6 && echo ERROR: burnP6 should already have been killed
-parallel: This job failed:
-false
-burnP6: no process found
-  parallel -j4 --halt -2 ::: 'sleep 1' burnP5 true;     killall burnP5 && echo ERROR: burnP5 should already have been killed
-parallel: This job succeeded:
-true
-burnP5: no process found
-parallel --halt error echo ::: should not print
-parallel: Error: --halt must have 'never', 'soon', or 'now'.
-parallel --halt soon echo ::: should not print
-parallel: Error: --halt soon must be followed by ,success or ,fail.
-parallel --halt now echo ::: should not print
-parallel: Error: --halt now must be followed by ,success or ,fail.
-echo '**'
-**
 echo '### bug #44995: parallel echo {#} ::: 1 2 ::: 1 2'
 ### bug #44995: parallel echo {#} ::: 1 2 ::: 1 2
 parallel -k echo {#} ::: 1 2 ::: 1 2
@@ -308,8 +292,8 @@ OK
 ~/privat/parallel/testsuite
 OK
   parallel --wd ... 'pwd; echo $OLDPWD; echo' ::: OK | perl -pe 's/\d+/0/g'
-/mnt/0tb/home/tange/.parallel/tmp/aspire-0-0
-/mnt/0tb/home/tange/privat/parallel/testsuite
+~/.parallel/tmp/hk-0-0
+~/privat/parallel/testsuite
 OK
   parallel --wd . 'pwd; echo $OLDPWD; echo' ::: OK
 ~/privat/parallel/testsuite
@@ -1495,7 +1479,7 @@ echo '### bug #34422: parallel -X --eta crashes with div by zero'
   seq 2 | stdout parallel -X --eta echo | grep -E -v 'ETA:.*AVG'
 
 Computers / CPU cores / Max jobs to run
-1:local / 8 / 2
+1:local / 2 / 2
 
 Computer:jobs running/jobs completed/%of started jobs/Average seconds to complete
 echo '**'
@@ -1612,6 +1596,13 @@ par_append_joblog	### can you append to a joblog using +
 par_append_joblog	1
 par_append_joblog	1
 par_append_joblog	3 /tmp/parallel_append_joblog
+par_basic_halt	parallel: This job failed:
+par_basic_halt	false
+par_basic_halt	parallel: This job succeeded:
+par_basic_halt	true
+par_basic_halt	parallel: Error: --halt must have 'never', 'soon', or 'now'.
+par_basic_halt	parallel: Error: --halt soon must be followed by ,success or ,fail.
+par_basic_halt	parallel: Error: --halt now must be followed by ,success or ,fail.
 par_empty	bug #:
 par_empty	true
 par_empty_line	### Test bug: empty line for | sh with -k
@@ -1628,12 +1619,25 @@ par_link_files_as_only_arg	3 3 3
 par_macron	п
 par_macron	п
 par_macron	п п
+par_macron	п п
+par_macron	п
+par_macron	по п
+par_macron	"по" п
 par_macron	по
 par_macron	по
 par_macron	по по
+par_macron	по по
+par_macron	по
+par_macron	поо по
+par_macron	"поо" по
+par_macron	/bin/bash: -c: line 0: syntax error near unexpected token `newline'
+par_macron	/bin/bash: -c: line 0: `echo п<п<п>п>'
 par_macron	п<п<п>п>
-par_macron	п<п<п>п>
+par_macron	/bin/bash: п: No such file or directory
 par_macron	п<п<п>п> п<п<п>п>
+par_macron	п<п<п>п>
+par_macron	по<по<по>по> п<п<п>п>
+par_macron	"по<по<по>по>" п<п<п>п>
 par_pipepart_block_bigger_2G	### Test that --pipepart can have blocks > 2GB
 par_pipepart_block_bigger_2G	      1       1       4
 par_python_children	### bug #49970: Python child process dies if --env is used

@@ -16,6 +16,9 @@ export SMALLDISK
   sudo chmod 777 /mnt/ram
 ) >/dev/null 2>/dev/null
 
+# Clean tmp
+find /tmp{/*,}/*.{par,tms,tmx} 2>/dev/null -mmin -10 | parallel rm
+
 stdsort() {
     "$@" 2>&1 | sort;
 }
@@ -117,17 +120,6 @@ echo '### bug #44614: --pipepart --header off by one'
 
 echo '### PARALLEL_TMUX not found'
   PARALLEL_TMUX=not-existing parallel --tmux echo ::: 1
-
-echo '**'
-
-  parallel -j4 --halt 2 ::: 'sleep 1' burnP6 false; 
-    killall burnP6 && echo ERROR: burnP6 should already have been killed
-  parallel -j4 --halt -2 ::: 'sleep 1' burnP5 true; 
-    killall burnP5 && echo ERROR: burnP5 should already have been killed
-
-parallel --halt error echo ::: should not print
-parallel --halt soon echo ::: should not print
-parallel --halt now echo ::: should not print
 
 echo '**'
 
@@ -689,20 +681,40 @@ par_link_files_as_only_arg() {
 }
 
 par_macron() {
-    macron=$(perl -e 'print "\257"')
-    parallel ::: "echo $macron"
-    parallel echo ::: "$macron"
-    parallel echo "$macron" ::: $macron
-    macron_a=$(perl -e 'print "\257\256"')
-    parallel ::: "echo $macron_a"
-    parallel echo ::: "$macron_a"
-    parallel echo "$macron_a" ::: $macron_a
-    a=$(perl -e 'print "\257<\257<\257>\257>"')
-    parallel ::: "echo \"$a\""
-    parallel echo ::: "$a"
-    parallel echo \"$a\" ::: $a
+    print_it() {
+	parallel ::: "echo $1"
+	parallel echo ::: "$1"
+	parallel echo "$1" ::: "$1"
+	parallel echo \""$1"\" ::: "$1"
+	parallel -q echo ::: "$1"
+	parallel -q echo "$1" ::: "$1"
+	parallel -q echo \""$1"\" ::: "$1"
+    }
+    print_it "$(perl -e 'print "\257"')"
+    print_it "$(perl -e 'print "\257\256"')"
+    print_it "$(perl -e 'print "\257<\257<\257>\257>"')"
 }
 
+par_basic_halt() {
+    cpuburn=$(tempfile)
+    cpuburn2=$(tempfile)
+    (echo '#!/usr/bin/perl'
+     echo "eval{setpriority(0,0,9)}; while(1){}") > $cpuburn
+    chmod 700 $cpuburn
+    cp -a $cpuburn $cpuburn2
+    
+    parallel -j4 --halt 2 ::: 'sleep 1' $cpuburn false;
+    killall $(basename $cpuburn) 2>/dev/null &&
+	echo ERROR: cpuburn should already have been killed
+    parallel -j4 --halt -2 ::: 'sleep 1' $cpuburn2 true;
+    killall $(basename $cpuburn2) 2>/dev/null &&
+	echo ERROR: cpuburn2 should already have been killed
+    rm $cpuburn $cpuburn2
+    
+    parallel --halt error echo ::: should not print
+    parallel --halt soon echo ::: should not print
+    parallel --halt now echo ::: should not print
+}
 
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort |

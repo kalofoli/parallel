@@ -8,7 +8,7 @@ unset run_test
 
 cat <<'EOF' | sed -e s/\$SERVER1/$SERVER1/\;s/\$SERVER2/$SERVER2/ | stdout parallel -vj300% -k --joblog /tmp/jl-`basename $0` -L1
 echo '### Test --load remote'
-  ssh parallel@lo 'seq 10 | parallel --nice 19 --timeout 15 -j0 -N0 burnP6' & 
+  ssh parallel@lo 'seq 10 | parallel --nice 19 --timeout 15 -j0 -qN0 perl -e while\(1\)\{\ \}' & 
   sleep 1; 
   stdout /usr/bin/time -f %e parallel -S parallel@lo --load 10 sleep ::: 1 | perl -ne '$_ > 10 and print "OK\n"'
 

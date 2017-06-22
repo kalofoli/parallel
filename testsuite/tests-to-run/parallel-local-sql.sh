@@ -9,7 +9,8 @@ export DEBUG=false
 p_showsqlresult() {
   SERVERURL=$1
   TABLE=$2
-  sql $SERVERURL "select Host,Command,V1,V2,Stdout,Stderr from $TABLE order by seq;"
+  # No hostname as it can differ
+  sql $SERVERURL "select Command,V1,V2,Stdout,Stderr from $TABLE order by seq;"
 }
 
 p_wrapper() {
@@ -112,18 +113,17 @@ par_shuf() {
   touch $T1
 }
 
-par_sqlandworker_lo() {
-  p_template -S lo
-}
-
 par_sql_joblog() {
   echo '### should only give a single --joblog heading'
   echo '### --sqlmaster/--sqlworker'
   parallel -k --joblog - --sqlmaster $DBURL --wait sleep .3\;echo ::: {1..5} ::: {a..e} |
     perl -pe 's/\d+\.\d+/999.999/g' | sort -n &
   sleep 0.5
-  parallel -k --joblog - --sqlworker $DBURL
+  T=$(tempfile)
+  parallel -k --joblog - --sqlworker $DBURL > $T
   wait
+  # Needed because of race condition
+  cat $T; rm $T
   echo '### --sqlandworker'
   parallel -k --joblog - --sqlandworker $DBURL sleep .3\;echo ::: {1..5} ::: {a..e} |
     perl -pe 's/\d+\.\d+/999.999/g' | sort -n

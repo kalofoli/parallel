@@ -54,21 +54,21 @@ echo '### Test --onall -u';   parallel --onall -S parallel@lo,csh@lo -u '(echo {
 3
 echo '### Test --nonall';   parallel --nonall -k -S parallel@lo,csh@lo pwd | sort
 ### Test --nonall
-/mnt/4tb/home/csh
-/mnt/4tb/home/parallel
+/home/csh
+/home/parallel
 echo '### Test --nonall -u - should be interleaved x y x y';   parallel --nonall -S parallel@lo,csh@lo -u 'pwd|grep -q csh && sleep 3; pwd;sleep 12;pwd;'
 ### Test --nonall -u - should be interleaved x y x y
-/mnt/4tb/home/parallel
-/mnt/4tb/home/csh
-/mnt/4tb/home/parallel
-/mnt/4tb/home/csh
+/home/parallel
+/home/csh
+/home/parallel
+/home/csh
 echo '### Test read sshloginfile from STDIN';   echo parallel@lo,csh@lo | parallel -S - -k --nonall pwd;   echo parallel@lo,csh@lo | parallel --sshloginfile - -k --onall pwd\; echo ::: foo
 ### Test read sshloginfile from STDIN
-/mnt/4tb/home/csh
-/mnt/4tb/home/parallel
-/mnt/4tb/home/csh
+/home/csh
+/home/parallel
+/home/csh
 foo
-/mnt/4tb/home/parallel
+/home/parallel
 foo
 echo '**'
 **
@@ -102,10 +102,10 @@ echo '**'
 **
 echo '### Test --workdir .';   ssh parallel@lo mkdir -p mydir;   mkdir -p $HOME/mydir; cd $HOME/mydir;   parallel --workdir . -S parallel@lo ::: pwd
 ### Test --workdir .
-/mnt/4tb/home/parallel/mydir
+/home/parallel/mydir
 echo '### Test --wd .';   ssh csh@lo mkdir -p mydir;   mkdir -p $HOME/mydir; cd $HOME/mydir;   parallel --workdir . -S csh@lo ::: pwd
 ### Test --wd .
-/mnt/4tb/home/csh/mydir
+/home/csh/mydir
 echo '### Test --wd {}';   ssh csh@lo rm -rf wd1 wd2;   mkdir -p $HOME/mydir; cd $HOME/mydir;   parallel --workdir {} -S csh@lo touch ::: wd1 wd2;   ssh csh@lo ls -d wd1 wd2
 ### Test --wd {}
 wd1

@@ -286,7 +286,7 @@ par_fish_man() {
     env_parallel ::: true false true false
     echo exit value $status should be 2
 
-    env_parallel --no-such-option >/dev/null
+    env_parallel --no-such-option 2>&1 >/dev/null
     echo exit value $status should be 255
 _EOF
   )
@@ -632,7 +632,8 @@ par_bash_funky() {
     . `which env_parallel.bash`;
 
     myvar="myvar  works"
-    funky=$(perl -e "print pack \"c*\", 1..255")
+    funky_single_line=$(perl -e "print pack \"c*\", 13..126,128..255")
+    funky_multi_line=$(perl -e "print pack \"c*\", 1..12,127")
     myarray=("" array_val2 3 "" 5 "  space  6  ")
     declare -A assocarr
     assocarr[a]=assoc_val_a
@@ -643,14 +644,16 @@ par_bash_funky() {
       echo "$myvar"
       echo "${myarray[5]}"
       echo ${assocarr[a]}
-      echo Funky-"$funky"-funky
+      echo Funkyline-"$funky_single_line"-funkyline
+      echo Funkymultiline-"$funky_multi_line"-funkymultiline
     }
     env_parallel alias_echo ::: alias_works
     env_parallel func_echo ::: function_works
     env_parallel -S lo alias_echo ::: alias_works_over_ssh
     env_parallel -S lo func_echo ::: function_works_over_ssh
     echo
-    echo "$funky" | parallel --shellquote
+    echo "$funky_single_line" | parallel --shellquote
+    echo "$funky_multi_line" | parallel --shellquote
 _EOF
   )
   # Order is often different. Dunno why. So sort
@@ -864,6 +867,7 @@ par_bash_env_parallel_fifo() {
   myscript=$(cat <<'_EOF'
     echo 'bug #50435: Remote fifo broke in 20150522'
     # Due to $PARALLEL_TMP being transferred
+    . `which env_parallel.bash`
     OK=OK
     echo data from stdin | env_parallel --pipe -S lo --fifo 'cat {} && echo $OK'
     echo data from stdin | env_parallel --pipe -S lo --cat 'cat {} && echo $OK'
