@@ -11,7 +11,7 @@ test_pkgs="imagemagick expect autossh sshpass jq libpod-simple-perl pod2pdf gawk
 test_pkgs="$test_pkgs lua5.2 clisp php7.0-cli nodejs-legacy mono-csharp-shell"
 
 # DEBIAN package
-packaging_pkgs="dpkg-dev build-essential debhelper"
+packaging_pkgs="dpkg-dev build-essential debhelper osc cvs"
 # SHEBANG TOOLS
 shebang_pkgs="gnuplot octave ruby r-base-core"
 # SQL TOOLS

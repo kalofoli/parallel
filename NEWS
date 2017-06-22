@@ -1,3 +1,49 @@
+20170622
+
+* The command line can now contain \257 (Macron) or UTF characters
+  containing \257.
+
+* Vote for GNU Parallel's community ads on
+  http://meta.unix.stackexchange.com/a/4356/2972
+  http://meta.askubuntu.com/a/16750/22307
+  http://meta.serverfault.com/a/9040/45704
+
+* Graph for overhead for 1000 jobs has been updated. It remains
+  steadily at 3.5 ms per job on a 1.7 GHz machine
+  https://www.gnu.org/software/parallel/process-time-j2-1700MHz-3000-1000.pdf
+
+* GNU Parallel was cited in: The topology of the directed clique
+  complex as a network invariant
+  https://springerplus.springeropen.com/articles/10.1186/s40064-016-2022-y
+
+* GNU Parallel was cited in: Improving Optical Character Recognition
+  of Finnish Historical Newspapers with a Combination of Fraktur &
+  Antiqua Models and Image
+  http://www.ep.liu.se/ecp/131/038/ecp17131038.pdf
+
+* GNU Parallel was cited in: Parallel Execution of Structural Mechanic
+  Tasks with Use of Small Supercomputers
+  http://www.sciencedirect.com/science/article/pii/S1877705817324815
+
+* GNU Parallel was cited in: Integration of a Multilingual Preordering
+  Component into a Commercial SMT Platform
+  https://www.degruyter.com/downloadpdf/j/pralin.2017.108.issue-1/pralin-2017-0009/pralin-2017-0009.pdf
+
+* Tips For Running Jobs On Your VM
+  https://support.ehelp.edu.au/support/solutions/articles/6000089713-tips-for-running-jobs-on-your-vm#parallel
+
+* Speed up ML model development with GNU Parallel
+  https://pzelasko.github.io/posts/speed-up-ml-model-development-with-gnu-parallel
+
+* Parallelizing a Python Function for the Extremely Lazy
+  http://tdhopper.com/blog/2017/Jun/07/parallelizing-a-python-function-for-the-extremely-lazy/
+
+* 使用GNU parallel
+  http://www.android5.online/Android/androidjc/androidkf/gykf/201603/8741.html
+
+* Bug fixes and man page updates.
+
+
 20170522
 
 * --timeout can now use s=second,m=minute,h=hour,d=day.

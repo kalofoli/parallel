@@ -83,7 +83,7 @@ find home:tange/parallel/* -type f | grep -v parallel.spec | parallel -Xj1 osc r
 osc up home:tange/parallel/
 make
 # Reload build-status:
-https://build.opensuse.org/package/show?package=parallel&project=home%3Atange
+https://build.opensuse.org/package/show/home:tange/parallel
 # Check that one .deb (Debian 5.0) and one .rpm (CentOS) end with 'succeeded'
 
 == Download and test ==
