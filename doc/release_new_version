@@ -4,7 +4,7 @@
 
 Check that documentation is updated (compare to web):
 
-Fixet for 20170322
+Fixet for 20170622
 git diff last-release-commit
 Unmodified beta since last version => production
 Unmodified alpha since last version => beta
@@ -214,19 +214,7 @@ New in this release:
   http://meta.askubuntu.com/a/16750/22307
   http://meta.serverfault.com/a/9040/45704
 
-* Graph for overhead for 1000 jobs has been updated. It remains steadily at 3.5 ms per job on a 1.7 GHz machine https://www.gnu.org/software/parallel/process-time-j2-1700MHz-3000-1000.pdf
-
-* GNU Parallel was cited in: The topology of the directed clique complex as a network invariant https://springerplus.springeropen.com/articles/10.1186/s40064-016-2022-y
-
 * GNU Parallel was cited in:
-
-* GNU Parallel was cited in: Parallel Execution of Structural Mechanic Tasks with Use of Small Supercomputers http://www.sciencedirect.com/science/article/pii/S1877705817324815
-
-https://support.ehelp.edu.au/support/solutions/articles/6000089713-tips-for-running-jobs-on-your-vm#parallel
-
-https://pzelasko.github.io/posts/speed-up-ml-model-development-with-gnu-parallel
-
-http://tdhopper.com/blog/2017/Jun/07/parallelizing-a-python-function-for-the-extremely-lazy/
 
 <<Citation not OK: BAMClipper: removing primers from alignments to minimize false-negative mutations in amplicon next-generation sequencing https://www.nature.com/articles/s41598-017-01703-6>>
 

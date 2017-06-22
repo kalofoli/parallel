@@ -25,7 +25,8 @@ the destination variable and made to an array.
 If I<variablename> contains multiple names separated by ',' or space,
 the names will be the destination variables.
 
-B<parset> is not production ready and is beta quality.
+B<parset> is beta quality and not production ready, but please use it
+for everyday use and report bugs.
 
 
 =head1 OPTIONS
