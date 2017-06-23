@@ -1,10 +1,5 @@
 #!/usr/bin/env perl
 
-# XDG_RUNTIME_DIR/parallel = TMPDIR
-# XDG_CONFIG_HOME/parallel = ~/.parallel/config
-# XDG_CONFIG_DIRS
-# XDG_CACHE_HOME = ~/parallel/tmp + semaphores
-
 # Copyright (C) 2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017
 # Ole Tange and Free Software Foundation, Inc.
 #
@@ -928,7 +923,7 @@ sub options_hash {
 	 "linebuffer|linebuffered|line-buffer|line-buffered|lb" => \$opt::linebuffer,
 	 "tmux" => \$opt::tmux,
 	 "tmuxpane" => \$opt::tmuxpane,
-	 "null|0" => \$opt::0,
+	 "null|0" => \$opt::null,
 	 "quote|q" => \$opt::q,
 	 # Replacement strings
 	 "parens=s" => \$opt::parens,
@@ -1113,7 +1108,7 @@ sub parse_options {
     $Global::cshell = $Global::shell =~ m:/csh:;
     if(defined $opt::X) { $Global::ContextReplace = 1; }
     if(defined $opt::silent) { $Global::verbose = 0; }
-    if(defined $opt::0) { $/ = "\0"; }
+    if(defined $opt::null) { $/ = "\0"; }
     if(defined $opt::d) { $/ = unquote_printf($opt::d) }
     if(defined $opt::tagstring) {
 	$opt::tagstring = unquote_printf($opt::tagstring);
@@ -1263,7 +1258,7 @@ sub parse_options {
 	if($opt::max_lines eq "-0") {
 	    # -l -0 (swallowed -0)
 	    $opt::max_lines = 1;
-	    $opt::0 = 1;
+	    $opt::null = 1;
 	    $/ = "\0";
 	} elsif ($opt::max_lines == 0) {
 	    # If not given (or if 0 is given) => 1
@@ -1697,8 +1692,14 @@ sub open_joblog {
 			my ($outfh,$name) = ::tmpfile(SUFFIX => ".arg");
 			unlink($name);
 			# Put args into argfile
-			# Replace \0 with ' ' as used in print_joblog()
-			print $outfh map { s/\0/ /g; $_,$/ } @group;
+			if(grep /\0/, @group) {
+			    # force --null to deal with \n in commandlines
+			    ::warning("Command lines contain newline. Forcing --null.");
+			    $opt::null = 1;
+			    $/ = "\0";
+			}
+			# Replace \0 with '\n' as used in print_joblog()
+			print $outfh map { s/\0/\n/g; $_,$/ } @group;
 			seek $outfh, 0, 0;
 			exit_if_disk_full();
 			# Set filehandle to -a
@@ -4108,6 +4109,7 @@ sub citation {
 	  "}",
 	  "",
 	  "(Feel free to use \\nocite{Tange2011a})",
+	  "",
 	  "This helps funding further development; AND IT WON'T COST YOU A CENT.",
 	  "If you pay 10000 EUR you should feel free to use GNU Parallel without citing.",
 	  "",

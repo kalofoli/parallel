@@ -1,30 +1,4 @@
 #!/bin/bash
-
-echo 'bug #46120: Suspend should suspend (at least local) children'
-  echo 'it should burn 1.9 CPU seconds, but no more than that'
-  echo 'The 5 second sleep will make it be killed by timeout when it fgs'
-  stdout bash -i -c 'stdout /usr/bin/time -f CPUTIME=%U parallel --timeout 5 -q perl -e "while(1){ }" ::: 1 | grep -q CPUTIME=1 &
-  sleep 1.9; 
-  kill -TSTP -$!; 
-  sleep 5; 
-  fg; 
-  echo Zero=OK $?' | grep -v '\[1\]' | grep -v 'SHA256'
-
-  stdout bash -i -c 'echo 1 | stdout /usr/bin/time -f CPUTIME=%U parallel --timeout 5 -q perl -e "while(1){ }" | grep -q CPUTIME=1 & 
-  sleep 1.9; 
-  kill -TSTP -$!; 
-  sleep 5; 
-  fg; 
-  echo Zero=OK $?' | grep -v '\[1\]' | grep -v 'SHA256'
-
-  echo Control case: Burn for 2.9 seconds
-  stdout bash -i -c 'stdout /usr/bin/time -f CPUTIME=%U parallel --timeout 5 -q perl -e "while(1){ }" ::: 1 | grep -q CPUTIME=1 &
-  sleep 2.9; 
-  kill -TSTP -$!; 
-  sleep 5; 
-  fg; 
-  echo 1=OK $?' | grep -v '\[1\]' | grep -v 'SHA256'
-
   
 cat <<'EOF' | sed -e 's/;$/; /;' | stdout parallel -vj0 -k --joblog /tmp/jl-`basename $0` -L1
 echo '### -L -n with pipe'

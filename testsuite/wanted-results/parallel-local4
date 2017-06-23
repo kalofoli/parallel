@@ -1,16 +1,3 @@
-bug #46120: Suspend should suspend (at least local) children
-it should burn 1.9 CPU seconds, but no more than that
-The 5 second sleep will make it be killed by timeout when it fgs
-
-stdout /usr/bin/time -f CPUTIME=%U parallel --timeout 5 -q perl -e "while(1){ }" ::: 1 | grep --color=auto -q CPUTIME=1
-Zero=OK 0
-
-echo 1 | stdout /usr/bin/time -f CPUTIME=%U parallel --timeout 5 -q perl -e "while(1){ }" | grep --color=auto -q CPUTIME=1
-Zero=OK 0
-Control case: Burn for 2.9 seconds
-
-stdout /usr/bin/time -f CPUTIME=%U parallel --timeout 5 -q perl -e "while(1){ }" ::: 1 | grep --color=auto -q CPUTIME=1
-1=OK 1
 echo '### -L -n with pipe'
 ### -L -n with pipe
   seq 14 | parallel --pipe -k -L 3 -n 2 'cat;echo 6 Ln line record'

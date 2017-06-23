@@ -127,5 +127,30 @@ par_sqlworker_hostname() {
 	perl -pe "s/$hostname/<hostname>/g"
 }
 
+par_commandline_with_newline() {
+    echo 'bug #51299: --retry-failed with command with newline'
+    echo 'The format must remain the same'
+    (
+	parallel --jl - 'false "command
+with
+newlines"' ::: a b | sort
+
+	echo resume
+	parallel --resume --jl - 'false "command
+with
+newlines"' ::: a b c | sort
+
+	echo resume-failed
+	parallel --resume-failed --jl - 'false "command
+with
+newlines"' ::: a b c d | sort
+
+	echo retry-failed
+	parallel --retry-failed --jl - 'false "command
+with
+newlines"' ::: a b c d e | sort
+    ) | perl -pe 's/\0/<null>/g;s/\d+/./g'
+}
+
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort | parallel -j6 --tag -k '{} 2>&1'

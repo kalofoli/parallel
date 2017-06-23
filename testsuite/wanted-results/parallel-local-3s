@@ -4,6 +4,29 @@ par_children_receive_sig	Got TERM
 par_children_receive_sig	Got TERM
 par_children_receive_sig	Got INT
 par_children_receive_sig	Got TERM
+par_commandline_with_newline	bug #51299: --retry-failed with command with newline
+par_commandline_with_newline	The format must remain the same
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" a
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" b
+par_commandline_with_newline	Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+par_commandline_with_newline	resume
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" a
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" b
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" c
+par_commandline_with_newline	Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+par_commandline_with_newline	resume-failed
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" a
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" b
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" c
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" d
+par_commandline_with_newline	Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+par_commandline_with_newline	retry-failed
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" a
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" b
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" c
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" d
+par_commandline_with_newline	.	:	...	     ...	.	.	.	.	false "command<null>with<null>newlines" e
+par_commandline_with_newline	Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
 par_dryrun_timeout_ungroup	bug #51039: --dry-run --timeout 3600 -u breaks
 par_dryrun_timeout_ungroup	   1000    2000    8893
 par_keeporder_roundrobin	bug #50081: --keep-order --round-robin should give predictable results
@@ -26,6 +49,7 @@ par_multiline_commands	1
 par_multiline_commands	finish 1
 par_multiline_commands	2
 par_multiline_commands	finish 2
+par_multiline_commands	parallel: Warning: Command lines contain newline. Forcing --null.
 par_multiline_commands	3
 par_multiline_commands	finish 3
 par_pipepart_block	### --pipepart --block -# (# < 0)

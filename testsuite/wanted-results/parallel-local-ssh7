@@ -198,11 +198,11 @@ par_csh_man	-j n            Run n jobs in parallel
 par_csh_man	-k              Keep same order
 par_csh_man	Academic tradition requires you to cite works you base your article on.
 par_csh_man	If you pay 10000 EUR you should feel free to use GNU Parallel without citing.
+par_csh_man	If you use programs that use GNU Parallel to process data for an article in a
 par_csh_man	See 'man parallel' for details
 par_csh_man	This helps funding further development; AND IT WON'T COST YOU A CENT.
 par_csh_man	Unknown option: no-such-option
 par_csh_man	Usage:
-par_csh_man	When using programs that use GNU Parallel to process data for publication
 par_csh_man	With --plus:    {} = {+/}/{/} = {.}.{+.} = {+/}/{/.}.{+.} = {..}.{+..} =
 par_csh_man	aliases work
 par_csh_man	aliases work
@@ -217,7 +217,7 @@ par_csh_man	exit value -1 should be 255
 par_csh_man	exit value 2 should be 2
 par_csh_man	parallel [options] [command [arguments]] (::: arguments|:::: argfile(s))...
 par_csh_man	parallel [options] [command [arguments]] < list_of_arguments
-par_csh_man	please cite:
+par_csh_man	scientific publication, please cite:
 par_csh_man	too
 par_csh_man	too
 par_csh_man	too
@@ -602,8 +602,8 @@ par_tcsh_man
 par_tcsh_man	See 'man parallel' for details
 par_tcsh_man	
 par_tcsh_man	Academic tradition requires you to cite works you base your article on.
-par_tcsh_man	When using programs that use GNU Parallel to process data for publication
-par_tcsh_man	please cite:
+par_tcsh_man	If you use programs that use GNU Parallel to process data for an article in a
+par_tcsh_man	scientific publication, please cite:
 par_tcsh_man	
 par_tcsh_man	  O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
 par_tcsh_man	  ;login: The USENIX Magazine, February 2011:42-47.
