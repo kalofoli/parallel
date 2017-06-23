@@ -1381,7 +1381,7 @@ sub check_invalid_option_combinations {
 
 sub init_globals {
     # Defaults:
-    $Global::version = 20170623;
+    $Global::version = 20170624;
     $Global::progname = 'parallel';
     $Global::infinity = 2**31;
     $Global::debug = 0;
@@ -9453,8 +9453,7 @@ sub replaced {
 	$perl_expressions_as_re =
 	    join("|", map {s/^-?\d+//; "\Q$_\E"} keys %{$self->{'replacecount'}});
 	# Fish out the words that have replacement strings in them
-	for my $word (
-	    fish_out_words_with_rpl_strings()) {
+	for my $word (fish_out_words_with_rpl_strings()) {
 	    # word = AB \257< perlexpr \257> CD \257< perlexpr \257> EF
 	    ::debug("replace", "Replacing in $word\n");
 	    my $normal_replace;
@@ -9510,6 +9509,12 @@ sub replaced {
 	    # and will not be matched below
 	    for(@target) {
 		s/\257\256/\257/g;
+	    }
+	    if($opt::q) {
+		# \257 will be quoted too much
+		for(@target) {
+		    s/\\\257\\\256/\\\257/g;
+		}
 	    }
 	}
 	::debug("replace", "Return @target\n");

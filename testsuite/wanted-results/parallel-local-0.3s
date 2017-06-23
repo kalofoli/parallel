@@ -1621,23 +1621,23 @@ par_macron	п
 par_macron	п п
 par_macron	п п
 par_macron	п
+par_macron	п п
+par_macron	"п" п
+par_macron	по
+par_macron	по
+par_macron	по по
+par_macron	по по
+par_macron	по
 par_macron	по п
 par_macron	"по" п
-par_macron	по
-par_macron	по
-par_macron	по по
-par_macron	по по
-par_macron	по
-par_macron	поо по
-par_macron	"поо" по
 par_macron	/bin/bash: -c: line 0: syntax error near unexpected token `newline'
 par_macron	/bin/bash: -c: line 0: `echo п<п<п>п>'
 par_macron	п<п<п>п>
 par_macron	/bin/bash: п: No such file or directory
 par_macron	п<п<п>п> п<п<п>п>
 par_macron	п<п<п>п>
-par_macron	по<по<по>по> п<п<п>п>
-par_macron	"по<по<по>по>" п<п<п>п>
+par_macron	п<п<п>п> п<п<п>п>
+par_macron	"п<п<п>п>" п<п<п>п>
 par_pipepart_block_bigger_2G	### Test that --pipepart can have blocks > 2GB
 par_pipepart_block_bigger_2G	      1       1       4
 par_python_children	### bug #49970: Python child process dies if --env is used
