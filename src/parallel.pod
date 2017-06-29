@@ -4470,7 +4470,9 @@ Your bug report should always include:
 
 =item *
 
-The error message you get (if any).
+The error message you get (if any). If the error message is not from
+GNU B<parallel> you need to show why you think GNU B<parallel> caused
+these.
 
 =item *
 

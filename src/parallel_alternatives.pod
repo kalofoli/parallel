@@ -1040,6 +1040,15 @@ The failed commands can be resumed with:
 =back
 
 
+=head2 DIFFERENCES BETWEEN k-bx/par AND GNU Parallel
+
+kbx requires Haskell to work. This limits the number of platforms this
+can work on.
+
+Todo https://github.com/k-bx/par
+
+
+
 =head2 DIFFERENCES BETWEEN machma AND GNU Parallel
 
 Todo. Requires Go >= 1.7.

@@ -3723,11 +3723,30 @@ sub tstp {
     # Uses:
     #   %SIG
     # Returns: N/A
-    kill "TSTP", map { -$_ } keys %Global::running;
-    # Use default signal handler to suspend GNU Parallel self
-    $SIG{TSTP} = undef;
-    kill "TSTP", $$;
+    signal_children("TSTP");
 }
+
+sub sigpipe {
+    # Send SIGPIPE signal to all children process groups
+    # Uses:
+    #   %SIG
+    # Returns: N/A
+    signal_children("PIPE");
+}
+
+sub signal_children {
+    # Send signal to all children process groups
+    # and GNU Parallel itself
+    # Uses:
+    #   %SIG
+    # Returns: N/A
+    my $signal = shift;
+    kill $signal, map { -$_ } keys %Global::running;
+    # Use default signal handler for GNU Parallel itself
+    $SIG{$signal} = undef;
+    kill $signal, $$;
+}
+
 
 sub save_original_signal_handler {
     # Remember the original signal handler
@@ -3747,6 +3766,7 @@ sub save_original_signal_handler {
     $SIG{ALRM} = 'IGNORE';
     # Allow Ctrl-Z to suspend and `fg` to continue
     $SIG{TSTP} = \&tstp;
+    $SIG{PIPE} = \&sigpipe;
     $SIG{CONT} = sub {
 	# Set $SIG{TSTP} again (it is undef'ed in tstp() )
 	$SIG{TSTP} = \&tstp;

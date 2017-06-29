@@ -3,7 +3,7 @@
 # Simple jobs that never fails
 # Each should be taking 1-3s and be possible to run in parallel
 # I.e.: No race conditions, no logins
-cat <<'EOF' | sed -e 's/;$/; /;s/$SERVER1/'$SERVER1'/;s/$SERVER2/'$SERVER2'/' | stdout parallel -vj0 -k --joblog /tmp/jl-`basename $0` -L1
+cat <<'EOF' | sed -e 's/;$/; /;s/$SERVER1/'$SERVER1'/;s/$SERVER2/'$SERVER2'/' | stdout parallel -vj+0 -k --joblog /tmp/jl-`basename $0` -L1
 echo "### BUG: The length for -X is not close to max (131072)"; 
 
   seq 1 60000 | parallel -X echo {.} aa {}{.} {}{}d{} {}dd{}d{.} |head -n 1 |wc
@@ -28,48 +28,6 @@ echo '### bug #44546: If --compress-program fails: fail'
   parallel --line-buffer --compress-program false echo \;ls ::: /no-existing; echo $?
   parallel --compress-program false echo \;ls ::: /no-existing; echo $?
 
-echo 'bug #41613: --compress --line-buffer - no newline';
-
-  echo 'pipe compress tagstring'
-  perl -e 'print "O"'| parallel --compress --tagstring {#} --pipe --line-buffer cat;  echo "K"
-  echo 'pipe compress notagstring'
-  perl -e 'print "O"'| parallel --compress --pipe --line-buffer cat;  echo "K"
-  echo 'pipe nocompress tagstring'
-  perl -e 'print "O"'| parallel --tagstring {#} --pipe --line-buffer cat;  echo "K"
-  echo 'pipe nocompress notagstring'
-  perl -e 'print "O"'| parallel --pipe --line-buffer cat;  echo "K"
-  echo 'nopipe compress tagstring'
-  parallel --compress --tagstring {#} --line-buffer echo {} O ::: -n;  echo "K"
-  echo 'nopipe compress notagstring'
-  parallel --compress --line-buffer echo {} O ::: -n;  echo "K"
-  echo 'nopipe nocompress tagstring'
-  parallel --tagstring {#} --line-buffer echo {} O ::: -n;  echo "K"
-  echo 'nopipe nocompress notagstring'
-  parallel --line-buffer echo {} O ::: -n;  echo "K"
-
-echo 'Compress with failing (de)compressor'
-
-  parallel -k --tag               --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: tag true true
-  parallel -k --tag               --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: tag false true
-  parallel -k --tag               --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: tag false false
-  parallel -k --tag               --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: tag true false
-  parallel -k                     --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: true true
-  parallel -k                     --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: false true
-  parallel -k                     --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: false false
-  parallel -k                     --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: true false
-  parallel -k       --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: line-buffer true true
-  parallel -k       --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: line-buffer false true
-  parallel -k       --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: line-buffer false false
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: tag line-buffer true false
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: tag line-buffer true true
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: tag line-buffer false true
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: tag line-buffer false false
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: tag line-buffer true false
-  parallel -k --files             --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: files true true   | parallel rm
-  parallel -k --files             --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: files false true  | parallel rm
-  parallel -k --files             --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: files false false | parallel rm
-  parallel -k --files             --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: files true false  | parallel rm
-
 echo 'bug #44250: pxz complains File format not recognized but decompresses anyway'
 
   # The first line dumps core if run from make file. Why?!
@@ -77,24 +35,6 @@ echo 'bug #44250: pxz complains File format not recognized but decompresses anyw
   stdout parallel --compress --compress-program pixz --decompress-program 'pixz -d' ls /{}  ::: OK-if-missing-file
   stdout parallel --compress --compress-program pixz --decompress-program 'pixz -d' true ::: OK-if-no-output
   stdout parallel --compress --compress-program pxz true ::: OK-if-no-output
-
-echo 'bug #41613: --compress --line-buffer no newline';
-
-  perl -e 'print "It worked"'| parallel --pipe --compress --line-buffer cat; echo
-
-echo 'bug #48658: --linebuffer --files';
-
-  doit() { parallel --files --linebuffer --compress-program $1 seq ::: 100000 | wc -l ; }; 
-  export -f doit; 
-  parallel --tag -k doit ::: zstd pzstd clzip lz4 lzop pigz pxz gzip plzip pbzip2 lzma xz lzip bzip2 lbzip2 lrz
-
-  doit() { parallel --results /tmp/par48658$1 --linebuffer --compress-program $1 seq ::: 100000 | wc -l ; rm -rf "/tmp/par48658$1"; }; 
-  export -f doit; 
-  parallel --tag -k doit ::: zstd pzstd clzip lz4 lzop pigz pxz gzip plzip pbzip2 lzma xz lzip bzip2 lbzip2 lrz
-
-  doit() { parallel --linebuffer --compress-program $1 seq ::: 100000 | wc -l ; }; 
-  export -f doit; 
-  parallel --tag -k doit ::: zstd pzstd clzip lz4 lzop pigz pxz gzip plzip pbzip2 lzma xz lzip bzip2 lbzip2 lrz
 
 echo '**'
 
@@ -112,6 +52,53 @@ echo "### Test -m -I";
 
 
 EOF
+
+par_linebuffer_files() {
+    echo 'bug #48658: --linebuffer --files'
+    rm -rf /tmp/par48658-*
+
+    doit() {
+	compress="$1"
+	echo "normal"
+	parallel --linebuffer --compress-program $compress seq ::: 100000 |
+	    wc -l
+	echo "--files"
+	parallel --files --linebuffer --compress-program $1 seq ::: 100000 |
+	    wc -l
+	echo "--results"
+	parallel --results /tmp/par48658-$compress --linebuffer --compress-program $compress seq ::: 100000 |
+	    wc -l
+	rm -rf "/tmp/par48658-$compress"
+    }
+    export -f doit
+    parallel --tag -k doit ::: zstd pzstd clzip lz4 lzop pigz pxz gzip plzip pbzip2 lzma xz lzip bzip2 lbzip2 lrz
+}
+
+par_no_newline_compress() {
+    echo 'bug #41613: --compress --line-buffer - no newline';
+    pipe_doit() {
+	tagstring="$1"
+	compress="$2"
+	echo tagstring="$tagstring" compress="$compress"
+	perl -e 'print "O"'|
+	    parallel "$compress" $tagstring --pipe --line-buffer cat
+	echo "K"
+    }
+    export -f pipe_doit
+    nopipe_doit() {
+	tagstring="$1"
+	compress="$2"
+	echo tagstring="$tagstring" compress="$compress"
+	parallel "$compress" $tagstring --line-buffer echo {} O ::: -n
+	echo "K"
+    }
+    export -f nopipe_doit
+    parallel -qk --header : {pipe}_doit {tagstring} {compress} \
+	     ::: tagstring '--tagstring {#}' -k \
+	     ::: compress --compress -k \
+	     ::: pipe pipe nopipe
+    
+}
 
 par_failing_compressor() {
     echo 'Compress with failing (de)compressor'
@@ -226,11 +213,31 @@ par_parset() {
     echo "${res[9]}"
     rm /tmp/parset_input_$$
 
+    echo 'or process substitution'
+    parset res -k echo :::: <(seq 0 10)
+    echo "${res[0]}"
+    echo "${res[9]}"
+
     echo 'Commands with newline require -0'
     parset var -k -0 ::: 'echo "line1
 line2"' 'echo "command2"'
     echo "${var[0]}"
 }
+
+par_incomplete_linebuffer() {
+    echo 'bug #51337: --lb does not kill jobs at sigpipe'
+    cat > /tmp/parallel--lb-test <<'_EOF'
+#!/usr/bin/perl
+
+while(1){ print ++$t,"\n"}
+_EOF
+    chmod +x /tmp/parallel--lb-test
+
+    parallel --lb /tmp/parallel--lb-test ::: 1 | head
+    # Should be empty
+    ps aux | grep parallel[-]-lb-test
+}
+
 
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort |

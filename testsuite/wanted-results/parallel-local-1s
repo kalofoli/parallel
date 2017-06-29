@@ -87,140 +87,6 @@ parallel: Error: false failed.
 1
 parallel: Error: false failed.
 parallel: Error: false failed.
-echo 'bug #41613: --compress --line-buffer - no newline';   echo 'pipe compress tagstring'
-bug #41613: --compress --line-buffer - no newline
-pipe compress tagstring
-  perl -e 'print "O"'| parallel --compress --tagstring {#} --pipe --line-buffer cat;  echo "K"
-1	OK
-  echo 'pipe compress notagstring'
-pipe compress notagstring
-  perl -e 'print "O"'| parallel --compress --pipe --line-buffer cat;  echo "K"
-OK
-  echo 'pipe nocompress tagstring'
-pipe nocompress tagstring
-  perl -e 'print "O"'| parallel --tagstring {#} --pipe --line-buffer cat;  echo "K"
-1	OK
-  echo 'pipe nocompress notagstring'
-pipe nocompress notagstring
-  perl -e 'print "O"'| parallel --pipe --line-buffer cat;  echo "K"
-OK
-  echo 'nopipe compress tagstring'
-nopipe compress tagstring
-  parallel --compress --tagstring {#} --line-buffer echo {} O ::: -n;  echo "K"
-1	OK
-  echo 'nopipe compress notagstring'
-nopipe compress notagstring
-  parallel --compress --line-buffer echo {} O ::: -n;  echo "K"
-OK
-  echo 'nopipe nocompress tagstring'
-nopipe nocompress tagstring
-  parallel --tagstring {#} --line-buffer echo {} O ::: -n;  echo "K"
-1	OK
-  echo 'nopipe nocompress notagstring'
-nopipe nocompress notagstring
-  parallel --line-buffer echo {} O ::: -n;  echo "K"
-OK
-echo 'Compress with failing (de)compressor'
-Compress with failing (de)compressor
-  parallel -k --tag               --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: tag true true
-tag	tag
-true	true
-true	true
-  parallel -k --tag               --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: tag false true
-tag	tag
-false	false
-true	true
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k --tag               --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: tag false false
-tag	tag
-false	false
-false	false
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k --tag               --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: tag true false
-tag	tag
-true	true
-false	false
-  parallel -k                     --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: true true
-true
-true
-  parallel -k                     --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: false true
-false
-true
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k                     --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: false false
-false
-false
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k                     --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: true false
-true
-false
-  parallel -k       --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: line-buffer true true
-line-buffer
-true
-true
-  parallel -k       --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: line-buffer false true
-line-buffer
-false
-true
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k       --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: line-buffer false false
-line-buffer
-false
-false
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: tag line-buffer true false
-tag	tag
-line-buffer	line-buffer
-true	true
-false	false
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: tag line-buffer true true
-tag	tag
-line-buffer	line-buffer
-true	true
-true	true
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: tag line-buffer false true
-tag	tag
-line-buffer	line-buffer
-false	false
-true	true
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: tag line-buffer false false
-tag	tag
-line-buffer	line-buffer
-false	false
-false	false
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k --tag --line-buffer --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: tag line-buffer true false
-tag	tag
-line-buffer	line-buffer
-true	true
-false	false
-  parallel -k --files             --compress --compress-program 'cat;true'  --decompress-program 'cat;true'  echo ::: files true true   | parallel rm
-  parallel -k --files             --compress --compress-program 'cat;false' --decompress-program 'cat;true'  echo ::: files false true  | parallel rm
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k --files             --compress --compress-program 'cat;false' --decompress-program 'cat;false' echo ::: files false false | parallel rm
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-parallel: Error: cat;false failed.
-  parallel -k --files             --compress --compress-program 'cat;true'  --decompress-program 'cat;false' echo ::: files true false  | parallel rm
 echo 'bug #44250: pxz complains File format not recognized but decompresses anyway'
 bug #44250: pxz complains File format not recognized but decompresses anyway
   # The first line dumps core if run from make file. Why?!
@@ -231,61 +97,6 @@ can not seek in input: Illegal seek
 ls: cannot access '/OK-if-missing-file': No such file or directory
   stdout parallel --compress --compress-program pixz --decompress-program 'pixz -d' true ::: OK-if-no-output
   stdout parallel --compress --compress-program pxz true ::: OK-if-no-output
-echo 'bug #41613: --compress --line-buffer no newline';   perl -e 'print "It worked"'| parallel --pipe --compress --line-buffer cat; echo
-bug #41613: --compress --line-buffer no newline
-It worked
-echo 'bug #48658: --linebuffer --files';   doit() { parallel --files --linebuffer --compress-program $1 seq ::: 100000 | wc -l ; };   export -f doit;   parallel --tag -k doit ::: zstd pzstd clzip lz4 lzop pigz pxz gzip plzip pbzip2 lzma xz lzip bzip2 lbzip2 lrz
-bug #48658: --linebuffer --files
-zstd	1
-pzstd	1
-clzip	1
-lz4	1
-lzop	1
-pigz	1
-pxz	1
-gzip	1
-plzip	1
-pbzip2	1
-lzma	1
-xz	1
-lzip	1
-bzip2	1
-lbzip2	1
-lrz	1
-  doit() { parallel --results /tmp/par48658$1 --linebuffer --compress-program $1 seq ::: 100000 | wc -l ; rm -rf "/tmp/par48658$1"; };   export -f doit;   parallel --tag -k doit ::: zstd pzstd clzip lz4 lzop pigz pxz gzip plzip pbzip2 lzma xz lzip bzip2 lbzip2 lrz
-zstd	1
-pzstd	1
-clzip	1
-lz4	1
-lzop	1
-pigz	1
-pxz	1
-gzip	1
-plzip	1
-pbzip2	1
-lzma	1
-xz	1
-lzip	1
-bzip2	1
-lbzip2	1
-lrz	1
-  doit() { parallel --linebuffer --compress-program $1 seq ::: 100000 | wc -l ; };   export -f doit;   parallel --tag -k doit ::: zstd pzstd clzip lz4 lzop pigz pxz gzip plzip pbzip2 lzma xz lzip bzip2 lbzip2 lrz
-zstd	100000
-pzstd	100000
-clzip	100000
-lz4	100000
-lzop	100000
-pigz	100000
-pxz	100000
-gzip	100000
-plzip	100000
-pbzip2	100000
-lzma	100000
-xz	100000
-lzip	100000
-bzip2	100000
-lbzip2	100000
-lrz	100000
 echo '**'
 **
 echo "### Test -I";   seq 1 10 | parallel -k 'seq 1 {} | parallel -k -I :: echo {} ::'
@@ -453,6 +264,131 @@ par_failing_compressor	parallel: Error: cat;false failed.
 par_failing_compressor	parallel -k -k -k -k --compress --compress-program cat\;false --decompress-program cat\;false echo ::: C=cat\;false,D=cat\;false
 par_failing_compressor	C=cat;false,D=cat;false
 par_failing_compressor	parallel: Error: cat;false failed.
+par_incomplete_linebuffer	bug #51337: --lb does not kill jobs at sigpipe
+par_incomplete_linebuffer	1
+par_incomplete_linebuffer	2
+par_incomplete_linebuffer	3
+par_incomplete_linebuffer	4
+par_incomplete_linebuffer	5
+par_incomplete_linebuffer	6
+par_incomplete_linebuffer	7
+par_incomplete_linebuffer	8
+par_incomplete_linebuffer	9
+par_incomplete_linebuffer	10
+par_linebuffer_files	bug #48658: --linebuffer --files
+par_linebuffer_files	zstd	normal
+par_linebuffer_files	zstd	100000
+par_linebuffer_files	zstd	--files
+par_linebuffer_files	zstd	1
+par_linebuffer_files	zstd	--results
+par_linebuffer_files	zstd	1
+par_linebuffer_files	pzstd	normal
+par_linebuffer_files	pzstd	100000
+par_linebuffer_files	pzstd	--files
+par_linebuffer_files	pzstd	1
+par_linebuffer_files	pzstd	--results
+par_linebuffer_files	pzstd	1
+par_linebuffer_files	clzip	normal
+par_linebuffer_files	clzip	100000
+par_linebuffer_files	clzip	--files
+par_linebuffer_files	clzip	1
+par_linebuffer_files	clzip	--results
+par_linebuffer_files	clzip	1
+par_linebuffer_files	lz4	normal
+par_linebuffer_files	lz4	100000
+par_linebuffer_files	lz4	--files
+par_linebuffer_files	lz4	1
+par_linebuffer_files	lz4	--results
+par_linebuffer_files	lz4	1
+par_linebuffer_files	lzop	normal
+par_linebuffer_files	lzop	100000
+par_linebuffer_files	lzop	--files
+par_linebuffer_files	lzop	1
+par_linebuffer_files	lzop	--results
+par_linebuffer_files	lzop	1
+par_linebuffer_files	pigz	normal
+par_linebuffer_files	pigz	100000
+par_linebuffer_files	pigz	--files
+par_linebuffer_files	pigz	1
+par_linebuffer_files	pigz	--results
+par_linebuffer_files	pigz	1
+par_linebuffer_files	pxz	normal
+par_linebuffer_files	pxz	100000
+par_linebuffer_files	pxz	--files
+par_linebuffer_files	pxz	1
+par_linebuffer_files	pxz	--results
+par_linebuffer_files	pxz	1
+par_linebuffer_files	gzip	normal
+par_linebuffer_files	gzip	100000
+par_linebuffer_files	gzip	--files
+par_linebuffer_files	gzip	1
+par_linebuffer_files	gzip	--results
+par_linebuffer_files	gzip	1
+par_linebuffer_files	plzip	normal
+par_linebuffer_files	plzip	100000
+par_linebuffer_files	plzip	--files
+par_linebuffer_files	plzip	1
+par_linebuffer_files	plzip	--results
+par_linebuffer_files	plzip	1
+par_linebuffer_files	pbzip2	normal
+par_linebuffer_files	pbzip2	100000
+par_linebuffer_files	pbzip2	--files
+par_linebuffer_files	pbzip2	1
+par_linebuffer_files	pbzip2	--results
+par_linebuffer_files	pbzip2	1
+par_linebuffer_files	lzma	normal
+par_linebuffer_files	lzma	100000
+par_linebuffer_files	lzma	--files
+par_linebuffer_files	lzma	1
+par_linebuffer_files	lzma	--results
+par_linebuffer_files	lzma	1
+par_linebuffer_files	xz	normal
+par_linebuffer_files	xz	100000
+par_linebuffer_files	xz	--files
+par_linebuffer_files	xz	1
+par_linebuffer_files	xz	--results
+par_linebuffer_files	xz	1
+par_linebuffer_files	lzip	normal
+par_linebuffer_files	lzip	100000
+par_linebuffer_files	lzip	--files
+par_linebuffer_files	lzip	1
+par_linebuffer_files	lzip	--results
+par_linebuffer_files	lzip	1
+par_linebuffer_files	bzip2	normal
+par_linebuffer_files	bzip2	100000
+par_linebuffer_files	bzip2	--files
+par_linebuffer_files	bzip2	1
+par_linebuffer_files	bzip2	--results
+par_linebuffer_files	bzip2	1
+par_linebuffer_files	lbzip2	normal
+par_linebuffer_files	lbzip2	100000
+par_linebuffer_files	lbzip2	--files
+par_linebuffer_files	lbzip2	1
+par_linebuffer_files	lbzip2	--results
+par_linebuffer_files	lbzip2	1
+par_linebuffer_files	lrz	normal
+par_linebuffer_files	lrz	100000
+par_linebuffer_files	lrz	--files
+par_linebuffer_files	lrz	1
+par_linebuffer_files	lrz	--results
+par_linebuffer_files	lrz	1
+par_no_newline_compress	bug #41613: --compress --line-buffer - no newline
+par_no_newline_compress	tagstring=--tagstring {#} compress=--compress
+par_no_newline_compress	1	OK
+par_no_newline_compress	tagstring=--tagstring {#} compress=--compress
+par_no_newline_compress	1	OK
+par_no_newline_compress	tagstring=--tagstring {#} compress=-k
+par_no_newline_compress	1	OK
+par_no_newline_compress	tagstring=--tagstring {#} compress=-k
+par_no_newline_compress	1	OK
+par_no_newline_compress	tagstring=-k compress=--compress
+par_no_newline_compress	OK
+par_no_newline_compress	tagstring=-k compress=--compress
+par_no_newline_compress	OK
+par_no_newline_compress	tagstring=-k compress=-k
+par_no_newline_compress	OK
+par_no_newline_compress	tagstring=-k compress=-k
+par_no_newline_compress	OK
 par_parset	### test parset
 par_parset	Put output into $myarray
 par_parset	10
@@ -484,6 +420,9 @@ par_parset	~/privat/parallel/testsuite
 par_parset	You cannot pipe into parset, but must use a tempfile
 par_parset	1
 par_parset	10
+par_parset	or process substitution
+par_parset	0
+par_parset	9
 par_parset	Commands with newline require -0
 par_parset	line1
 par_parset	line2
