@@ -20,7 +20,7 @@ B<parallel> into shell variables.
 The B<parset> function is defined as part of B<env_parallel>.
 
 If I<variablename> is a single variable name, this will be treated as
-the destination variable and made to an array.
+the destination variable and made into an array.
 
 If I<variablename> contains multiple names separated by ',' or space,
 the names will be the destination variables.
@@ -70,7 +70,12 @@ You cannot pipe into B<parset>, but must use a tempfile:
   parset res echo :::: parallel_input
   echo "${res[0]}"
   echo "${res[9]}"
-  
+
+or Bash process substitution:
+
+  parset res echo :::: <(seq 100)
+  echo "${res[0]}"
+  echo "${res[99]}"
 
 =head3 Installation
 
