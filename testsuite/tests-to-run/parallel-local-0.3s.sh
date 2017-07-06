@@ -716,6 +716,14 @@ par_basic_halt() {
     parallel --halt now echo ::: should not print
 }
 
+par_newline_in_command() {
+    echo Command with newline and positional replacement strings
+    parallel "
+      echo {1
+      } {2}
+    " ::: O ::: K
+}
+
 export -f $(compgen -A function | grep par_)
 compgen -A function | grep par_ | sort |
     parallel -j6 --tag -k --joblog +/tmp/jl-`basename $0` '{} 2>&1'

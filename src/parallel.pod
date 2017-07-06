@@ -557,7 +557,14 @@ Column separator. The input will be treated as a table with I<regexp>
 separating the columns. The n'th column can be access using
 B<{>I<n>B<}> or B<{>I<n>.B<}>. E.g. B<{3}> is the 3rd column.
 
-B<--colsep> implies B<--trim rl>.
+If there are more input sources, each input source will be separated,
+but the columns from each input source will be linked (see B<--link>).
+
+  parallel --colsep '-' echo {4} {3} {2} {1} \
+    ::: A-B C-D ::: e-f g-h
+
+B<--colsep> implies B<--trim rl>, which can be overridden with
+B<--trim n>.
 
 I<regexp> is a Perl Regular Expression:
 http://perldoc.perl.org/perlre.html
@@ -3024,6 +3031,33 @@ This also works if the input file is a file with columns:
     parallel --colsep '\t' --header : echo {Name} {E-mail address}
 
 
+=head1 EXAMPLE: From a to b and b to c
+
+Assume you have input like:
+
+  aardvark
+  babble
+  cab
+  dab
+  each
+
+and want to run combinations like:
+
+  aardvark babble
+  babble cab
+  cab dab
+  dab each
+
+If the input is in the file in.txt:
+
+  parallel echo {1} - {2} ::::+ <(head -n -1 in.txt) <(tail -n +2 in.txt)
+
+If the input is in the array $a here are two solutions:
+
+  seq $((${#a[@]}-1)) | env_parallel --env a echo '${a[{=$_--=}]} - ${a[{}]}'
+  parallel echo {1} - {2} ::: "${a[@]::${#a[@]}-1}" :::+ "${a[@]:1}"
+
+
 =head1 EXAMPLE: Count the differences between all files in a dir
 
 Using B<--results> the results are saved in /tmp/diffcount*.
@@ -3135,6 +3169,20 @@ B<--tag> works with B<--line-buffer> but not with B<-u>:
 Check the uptime of the servers in I<~/.parallel/sshloginfile>:
 
   parallel --tag -S .. --nonall uptime
+
+
+=head1 EXAMPLE: Colorize output
+
+Give each job a new color. Most terminals support ANSI colors with the
+escape code "\033[30;XXm" where 30 <= XX <= 37:
+
+    parallel --tagstring '\033[30;{=$_=++$::color%8+30=}m' seq {} ::: {1..10}    
+    parallel --rpl '{color} $_="\033[30;".++$::color%8+30."=}m"' \
+      --tagstring {color} seq {} ::: {1..10}
+
+To get rid of the initial \t (which comes from B<--tagstring>):
+
+    ... | perl -pe 's/\t//'
 
 
 =head1 EXAMPLE: Keep order of output same as order of input
@@ -4190,7 +4238,7 @@ computer.
 
 =item $PARALLEL_SHELL
 
-Use this shell the shell for the commands run by GNU Parallel:
+Use this shell for the commands run by GNU Parallel:
 
 =over 2
 

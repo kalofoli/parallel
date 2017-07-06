@@ -1638,6 +1638,8 @@ par_macron	¯<¯<¯>¯> ¯<¯<¯>¯>
 par_macron	¯<¯<¯>¯>
 par_macron	¯<¯<¯>¯> ¯<¯<¯>¯>
 par_macron	"¯<¯<¯>¯>" ¯<¯<¯>¯>
+par_newline_in_command	Command with newline and positional replacement strings
+par_newline_in_command	O K
 par_pipepart_block_bigger_2G	### Test that --pipepart can have blocks > 2GB
 par_pipepart_block_bigger_2G	      1       1       4
 par_python_children	### bug #49970: Python child process dies if --env is used
