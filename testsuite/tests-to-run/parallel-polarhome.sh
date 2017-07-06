@@ -66,6 +66,21 @@ echo '### Does PARALLEL_SHELL help exporting a bash function not kill parallel'
 echo
 PARALLEL_SHELL=/bin/bash parallel --retries $RETRIES --onall -j0 -k --tag --timeout $TIMEOUT $S_POLAR 'func() { cat <(echo bash only B); };export -f func; bin/parallel func ::: ' ::: 1 2>&1 | sort
 
+echo
+echo '### env_parallel echo :::: <(echo OK)'
+echo '(bash only)'
+echo
+parallel --retries $RETRIES --onall -j0 -k --tag --timeout $TIMEOUT $S_POLAR 'bin/env_parallel --install'
+parallel --retries $RETRIES --onall -j0 -k --tag --timeout $TIMEOUT $S_POLAR 'env_parallel echo env_parallel ::: OK'
+parallel --retries $RETRIES --onall -j0 -k --tag --timeout $TIMEOUT $S_POLAR 'env_parallel echo reading from process substitution :::: <(echo OK)'
+
+# eval 'myfunc() { echo '$(perl -e 'print "x"x20000')'; }'
+# env_parallel myfunc ::: a | wc # OK
+# eval 'myfunc2() { echo '$(perl -e 'print "x"x120000')'; }'
+# env_parallel myfunc ::: a | wc # Fail too big env
+# Can this be made faster using `ssh -M`?
+# Can it be moved to virtualbox?
+
 # Started earlier - therefore wait
 wait; cat /tmp/test_empty_cmd
 rm /tmp/test_empty_cmd

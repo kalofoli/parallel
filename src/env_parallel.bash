@@ -97,13 +97,10 @@ env_parallel() {
             ' -- "$@"
     }
 
-    if which parallel | grep 'no parallel in' >/dev/null; then
-	echo 'env_parallel: Error: parallel must be in $PATH.' >&2
-	return 255
-    fi
-    if which parallel >/dev/null; then
-	true which on linux
-    else
+
+    # Bash 'which' is broken in version 3.2.25 and 4.2.39
+    # The crazy '[ "`...`" == "" ]' is needed for the same reason
+    if [ "`which parallel`" == "" ]; then
 	echo 'env_parallel: Error: parallel must be in $PATH.' >&2
 	return 255
     fi
@@ -115,7 +112,7 @@ env_parallel() {
     _ignore_UNDERSCORE="`_get_ignored_VARS \"$@\"`"
 
     # --record-env
-    if perl -e 'exit grep { /^--record-env$/ } @ARGV' -- "$@"; then
+    if [ "`perl -e 'exit grep { /^--record-env$/ } @ARGV' -- "$@"; echo $?`" == 0 ] ; then
 	true skip
     else
 	(_names_of_ALIASES;
@@ -152,6 +149,7 @@ env_parallel() {
     fi
     unset _variable_NAMES
 
+    _which_true="`which true`"
     # Copy shopt (so e.g. extended globbing works)
     # But force expand_aliases as aliases otherwise do not work
     PARALLEL_ENV="`
@@ -165,7 +163,7 @@ env_parallel() {
     unset _list_variable_VALUES
     unset _list_function_BODIES
     # Test if environment is too big
-    if `which true` >/dev/null ; then
+    if [ "`which true`" == "$_which_true" ] ; then
 	`which parallel` "$@";
 	_parallel_exit_CODE=$?
 	unset PARALLEL_ENV;
