@@ -10175,7 +10175,7 @@ sub get {
 	    ::debug("run", "line='$line'\n");
 	    if($line ne "") {
 		for my $s (split /$opt::colsep/o, $line, -1) {
-		    push @out_record, Arg->new($s);
+		    push @out_record, Arg->new($s, $arg);
 		}
 	    } else {
 		push @out_record, Arg->new("");
@@ -10494,8 +10494,12 @@ sub new {
     my $class = shift;
     my $orig = shift;
     my @hostgroups;
-    if($opt::hostgroups) {
-	if($orig =~ s:@(.+)::) {
+    if(@_) {
+    	my $parent = shift;
+    	@hostgroups = $parent->hostgroups();
+    }
+    if(!@hostgroups and $opt::hostgroups) {
+	if($orig =~ s:@([^@]+)$::) {
 	    # We found hostgroups on the arg
 	    @hostgroups = split(/\+/, $1);
 	    if(not grep { defined $Global::hostgroups{$_} } @hostgroups) {
@@ -10510,6 +10514,11 @@ sub new {
 	'orig' => $orig,
 	'hostgroups' => \@hostgroups,
     }, ref($class) || $class;
+}
+
+sub hostgroups {
+	my $self = shift;
+	return @{ $self->{'hostgroups'} };
 }
 
 sub Q {
